@@ -2,10 +2,6 @@ package com.example.andreibuiza.buggymovi;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by AndreiBuiza on 6/13/2016.
@@ -13,13 +9,7 @@ import org.json.JSONObject;
 public class theMovieDB_API_response implements Parcelable{
     private String LOG_TAG=theMovieDB_API_response.class.getSimpleName();
 
-    String images_base_URL;
-
     public static final String DATA_LOCK=theMovieDB_API_response.class.getSimpleName();
-
-    public JSONObject Configuration;
-    public JSONObject Popular_movies;
-    public JSONObject Top_Rated_movies;
 
     private String Configuration_str;
     private String Popular_movies_str;
@@ -64,43 +54,15 @@ public class theMovieDB_API_response implements Parcelable{
         dest.writeStringArray(new String[]{Configuration_str, Popular_movies_str, Top_Rated_movies_str});
     }
 
-    public String toString(){
-        return Configuration.toString()+"\n"+Popular_movies.toString()+"n"+Top_Rated_movies.toString();
+    public String getConfiguration_str() {
+        return Configuration_str;
     }
 
-    public void setup (){
-        Log.d(LOG_TAG, "converting the string to JSON");
-        try{
-            Configuration=new JSONObject(Configuration_str);
-            Popular_movies=new JSONObject(Popular_movies_str);
-            Top_Rated_movies=new JSONObject(Top_Rated_movies_str);
-        }catch(JSONException e){
-            Log.e(LOG_TAG,"Unable to convert the strings into JSONObject" + e);
-        }
-
-        try{
-            JSONObject images= Configuration.getJSONObject("images");
-            images_base_URL = images.getString("base_url") + images.getJSONArray("poster_sizes").get(2);
-        }catch(JSONException e){
-            Log.e(LOG_TAG, "JSONObject access error...");
-        }
-
-        //call method to construct the image URLs
-        createImgURLs_pop_movies();
-        createImgURLs_top_movies();
+    public String getPopular_movies_str() {
+        return Popular_movies_str;
     }
 
-    public String[] get_String_response(){
-        return new String[]{Configuration_str, Popular_movies_str, Top_Rated_movies_str};
-    }
-
-    //Method that constructs the image URLs for the popular movies
-    private void createImgURLs_pop_movies(){
-
-    }
-
-    //Method that constructs the image URLs for the popular movies
-    private void createImgURLs_top_movies(){
-
+    public String getTop_Rated_movies_str() {
+        return Top_Rated_movies_str;
     }
 }

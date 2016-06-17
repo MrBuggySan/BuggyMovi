@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
          * @return
          */
         public String getData(String address){
-            Log.v(LOG_TAG, "getData is starting...");
+
             HttpURLConnection http_connect=null;
             BufferedReader reader=null;
             String JSON_API_response;
@@ -226,15 +226,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-//            try{
-//                Log.d(LOG_TAG, JSON_API_response);
-//                jsonobect = new JSONObject(JSON_API_response);
-//                return jsonobect;
-//            }catch(JSONException e){
-//                Log.e(LOG_TAG, "Unable to convert string to JSON Object", e);
-//            }
-
-            //return null;
             return JSON_API_response;
         }
 
