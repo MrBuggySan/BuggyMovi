@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                                 .appendPath("popular")
                                 .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                                                 getString(R.string.theMovieDBAPI_key));
-            //Log.d(LOG_TAG, "fetch popular with: " + popular );
+            Log.d(LOG_TAG, "fetch popular with: " + popular );
 
             //http://api.themoviedb.org/3/movie/top_rated?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
             Uri.Builder top_rated=BuildBaseUrl()
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                                 .appendPath("top_rated")
                                 .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                                                 getString(R.string.theMovieDBAPI_key));
-            //Log.d(LOG_TAG, "fetch config with: " + top_rated );
+            Log.d(LOG_TAG, "fetch top rated with: " + top_rated );
 
             return new theMovieDB_API_response(getData(config.build().toString()),
                                                 getData(popular.build().toString()),

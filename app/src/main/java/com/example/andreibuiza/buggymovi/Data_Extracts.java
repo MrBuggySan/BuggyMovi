@@ -10,6 +10,7 @@ public class Data_Extracts {
     //public so I can easily manipulate the data of each element in the array.
     private Movie_element[] popularMovies;
     private Movie_element[] topRatedMovies;
+    private String baseImgURL;
 
 
 
@@ -44,6 +45,22 @@ public class Data_Extracts {
 
     public void setPopularMovies(Movie_element[] popularMovies) {
         this.popularMovies = popularMovies;
+    }
+
+    public String getBaseImgURL(int elementWidth) {
+        String imgWidth = "w500";
+        if(  elementWidth <= 92 )                           imgWidth = "w92";
+        if(  92 < elementWidth && elementWidth <= 154 )     imgWidth = "w154";
+        if( 154 < elementWidth && elementWidth <= 185)      imgWidth = "w185";
+        if( 185 < elementWidth && elementWidth <= 342)      imgWidth = "w342";
+        if( 342 < elementWidth && elementWidth <= 500)      imgWidth = "w500";
+        if( 500 < elementWidth && elementWidth <= 780)      imgWidth = "w780";
+        //There is also an 'original' size, I will support that later.
+        return baseImgURL + imgWidth + '/';
+    }
+
+    public void setBaseImgURL(String baseImgURL) {
+        this.baseImgURL = baseImgURL;
     }
 
     public void testContent(){

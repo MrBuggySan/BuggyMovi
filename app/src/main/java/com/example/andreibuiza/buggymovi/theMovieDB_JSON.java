@@ -30,11 +30,11 @@ public class theMovieDB_JSON {
     /**
      * Set all of the data required for each movie
      */
-    public void setAll_of(Data_Extracts movieDatabase) throws JSONException{
+    public void setAll_of(Data_Extracts movieDatabase ) throws JSONException{
         Movie_element[] pop = movieDatabase.getPopularMovies();
         Movie_element[] top = movieDatabase.getTopRatedMovies();
         baseImgURL=getImgBaseURL();
-
+        movieDatabase.setBaseImgURL(baseImgURL);
         //Popular movies
         for(int i = 0 ; i < pop.length; i++){
             pop[i]= new Movie_element(getPopImageURL_of(i),getPopMovieTitle(i), getPopSynopsis(i), getPopRating(i), getPopReleaseDate(i) );
@@ -57,7 +57,13 @@ public class theMovieDB_JSON {
             JSONObject images= Configuration.getJSONObject("images");
 
             //http://image.tmdb.org/t/p/w154/
-            images_base_URL = images.getString("base_url") + '/' + images.getJSONArray("poster_sizes").get(2) + '/';
+
+
+
+            //images_base_URL = images.getString("base_url") + '/' + images.getJSONArray("poster_sizes").get(2) + '/';
+
+            //I will let Data_Extracts decide on the appropriate width size
+            images_base_URL = images.getString("base_url") + '/';
         return images_base_URL;
     }
 
@@ -65,14 +71,19 @@ public class theMovieDB_JSON {
      *Get the popular movie poster
      */
     private String getPopImageURL_of(int i) throws JSONException{
-        return baseImgURL + Popular_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
+        //return baseImgURL + Popular_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
+        //Instead of including the baseImgURL I will let Data_Extracts create it later on
+        return Popular_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
     }
 
     /**
      *Get the top rated movie poster
      */
     private String getTopImageURL_of(int i) throws JSONException{
-        return baseImgURL + Top_Rated_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
+        //return baseImgURL + Top_Rated_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
+        //Instead of including the baseImgURL I will let Data_Extracts create it later on
+        return Top_Rated_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
+
     }
 
     /**

@@ -47,16 +47,17 @@ public class MovieGridFragment extends Fragment {
             //Create the arrays inside allMovieData
             allMovieData = new Data_Extracts(JSON_response.getTopRatedMovie_size(), JSON_response.getPopularMovie_size());
 
+
             //Extract the data from JSONObjects and put them in allMovieData
             JSON_response.setAll_of(allMovieData);
 
-            allMovieData.testContent();
+            //allMovieData.testContent();
 
         }catch(JSONException e){
             Log.e(LOG_TAG, "Failed to create JSON objects out of API response");
         }
 
-        //find the
+        //Create the gridView
         GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
         gridview.setAdapter(new ImageAdapter(getActivity()));
 
@@ -96,10 +97,11 @@ public class MovieGridFragment extends Fragment {
             //Use Picasso to set the image onto the GridView
             //The poster must fill the width of the grid element
             GridView grid = (GridView) parent.findViewById(R.id.gridView);
-            Log.d(LOG_TAG, "The width in pixels is: " + grid.getColumnWidth());
+            //Log.d(LOG_TAG, "The width of the grid element in pixels is: " + grid.getColumnWidth());
+            //Log.d(LOG_TAG, allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getPopularMovies()[position].getPosterURL() );
             Picasso.with(mContext)
-                    .load(allMovieData.getPopularMovies()[position].getPosterURL())
-                    .resize(grid.getColumnWidth(),900 )
+                    .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getPopularMovies()[position].getPosterURL())
+                    .resize(grid.getColumnWidth(),(int) (grid.getColumnWidth()*1.5) )
                     .into(imageView);
 
             return imageView;
