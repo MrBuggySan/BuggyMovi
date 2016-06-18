@@ -38,18 +38,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             new Fetch_the_MovieDB_API().execute();
-            //The FragmentManager and FragmentTransction are used to programmatically add the fragment to the activity
-            //getSupportFragmentManager().beginTransaction().add(R.id.container, new MovieGrid()).commit();
-
-            //What is the difference between the framework fragment and the support library fragment?
-
-            //Framework fragment
-//            FragmentManager fragmentManager = getFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//            MovieGrid fragment = new MovieGrid();
-//            fragmentTransaction.add(R.id.container, fragment);
-//            fragmentTransaction.commit();
         }
     }
 
