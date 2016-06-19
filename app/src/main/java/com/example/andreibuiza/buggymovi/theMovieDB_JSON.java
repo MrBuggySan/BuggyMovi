@@ -34,6 +34,8 @@ public class theMovieDB_JSON {
         Movie_element[] pop = movieDatabase.getPopularMovies();
         Movie_element[] top = movieDatabase.getTopRatedMovies();
         baseImgURL=getImgBaseURL();
+
+        //The Data_Extracts object will deal with FULLY creating the img URL
         movieDatabase.setBaseImgURL(baseImgURL);
         //Popular movies
         for(int i = 0 ; i < pop.length; i++){
