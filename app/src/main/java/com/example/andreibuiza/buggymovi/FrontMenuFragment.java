@@ -1,18 +1,34 @@
 package com.example.andreibuiza.buggymovi;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 /**
  * Created by AndreiBuiza on 6/19/2016.
  */
-public class FrontMenuFragment extends Fragment {
+public class FrontMenuFragment extends Fragment implements View.OnClickListener{
+    OnButtonSelectedListener mListener;
+    private String LOG_TAG= FrontMenuFragment.class.getSimpleName();
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        try {
+            mListener = (OnButtonSelectedListener) context;
+            Log.d(LOG_TAG, "Activity has succesfully implemented callback function");
+        } catch (ClassCastException e) {
+            Log.e(LOG_TAG, "Activity did not implement the required OnButtonSelectedListener");
+            throw new ClassCastException(context.toString() + " must implement OnButtonSelectedListener");
+
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,9 +41,15 @@ public class FrontMenuFragment extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
         View rootView = inflater.inflate(R.layout.frontmenufragment, container, false);
 
-        Button myButton= (Button) rootView.findViewById(R.id.popButton);
-//        myButton.setOnClickListener(onClickButton(myButton));
-        //TODO:Improve aesthetics of the front page fragment
+        //Set the onClick event for each button
+        Button myButton=null;
+        int[] buttonIds= new int[]{R.id.popButton, R.id.topButton, R.id.nowPlayingButton, R.id.upcomingButton, R.id.latestButton};
+        for (int i = 0 ; i < buttonIds.length ; i++){
+            myButton=(Button) rootView.findViewById(buttonIds[i]);
+            myButton.setOnClickListener(this);
+        }
+
+        //TODO:Improve aesthetics of the front page fragment, prettify
 
         return rootView;
 
@@ -38,15 +60,16 @@ public class FrontMenuFragment extends Fragment {
         super.onStart();
     }
 
-
-    //TODO:Event when click occurs
-    public void onClickButton(View view){
-        CharSequence text = "Loading...";
-        int duration = Toast.LENGTH_SHORT;
-
-        Toast toast = Toast.makeText(getContext(), text, duration);
-        toast.show();
-
-
+    public void onClick(View view){
+        int pressedButtonID= view.getId();
+        mListener.OnButtonSelected(pressedButtonID);
     }
+
+    // Container Activity must implement this interface
+    public interface OnButtonSelectedListener {
+        public void OnButtonSelected(int buttonID);
+    }
+
+
+
 }

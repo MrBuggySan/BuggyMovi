@@ -47,11 +47,13 @@ public class MovieGridFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.moviegrid, container, false);
 
-        //TODO:Receive a bundle from the activity
+
+        Bundle bundle = this.getArguments();
+        int category = bundle.getInt(getString(R.string.menuToGridKey));
 
         //TODO: give this AsyncTask the choice on which category to download from the API
         //start downloading the data
-        new Fetch_the_MovieDB_API(getContext(), rootView).execute();
+        new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
 
         return rootView;
     }
@@ -108,7 +110,7 @@ public class MovieGridFragment extends Fragment {
 
 
     //TODO: call this with a parameter on which categorey to be downloaded from the API and display.
-    public class Fetch_the_MovieDB_API extends AsyncTask<String, String, theMovieDB_API_response> {
+    public class Fetch_the_MovieDB_API extends AsyncTask<Integer, String, theMovieDB_API_response> {
         private final String LOG_TAG= Fetch_the_MovieDB_API.class.getSimpleName();
         private View rootView;
         private Context mContext;
@@ -140,7 +142,9 @@ public class MovieGridFragment extends Fragment {
          */
         @Override
         //TODO:Modify to download the configuration and only one of the categories.
-        public theMovieDB_API_response doInBackground (String... params){
+        public theMovieDB_API_response doInBackground (Integer... params){
+            int category = params[0];
+
             //http://api.themoviedb.org/3/configuration?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
             Uri.Builder config= BuildBaseUrl()
                     .appendPath("configuration")
