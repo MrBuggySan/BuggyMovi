@@ -2,4 +2,9 @@
     <string name="app_name">Buggy Movi</string>
     <string name="theMovieDBAPI_key_parameter">api_key</string>
     <string name="theMovieDBAPI_key">7a0f090baebf83c2c4b2e49a59a85ebc</string>
+    <string name="popular">Popular Movies</string>
+    <string name="top">Top Rated Movies</string>
+    <string name="nowPlaying">Now Playing</string>
+    <string name="upcoming">Upcoming Movies</string>
+    <string name="latest">Latest Movie</string>
 </resources>
