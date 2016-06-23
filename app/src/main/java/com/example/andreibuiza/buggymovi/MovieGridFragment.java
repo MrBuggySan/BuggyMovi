@@ -51,7 +51,6 @@ public class MovieGridFragment extends Fragment {
         Bundle bundle = this.getArguments();
         int category = bundle.getInt(getString(R.string.menuToGridKey));
 
-        //TODO: give this AsyncTask the choice on which category to download from the API
         //start downloading the data
         new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
 
@@ -61,8 +60,11 @@ public class MovieGridFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-
     }
+
+    //TODO: Create a spinner menu so the user can change the category without going back to the main page.
+
+
 
     public class ImageAdapter extends BaseAdapter {
         private Context mContext;
@@ -98,8 +100,9 @@ public class MovieGridFragment extends Fragment {
             GridView grid = (GridView) parent.findViewById(R.id.gridView);
             //Log.d(LOG_TAG, "The width of the grid element in pixels is: " + grid.getColumnWidth());
             //Log.d(LOG_TAG, allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getPopularMovies()[position].getPosterURL() );
+            //TODO: setup a default image and the title of a movie when the movie poster is not available.
             Picasso.with(mContext)
-                    .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getPopularMovies()[position].getPosterURL())
+                    .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getCatMovies()[position].getPosterURL())
                     .resize(grid.getColumnWidth(),(int) (grid.getColumnWidth()*1.5) )
                     .into(imageView);
 
@@ -109,7 +112,7 @@ public class MovieGridFragment extends Fragment {
     }
 
 
-    //TODO: call this with a parameter on which categorey to be downloaded from the API and display.
+
     public class Fetch_the_MovieDB_API extends AsyncTask<Integer, String, theMovieDB_API_response> {
         private final String LOG_TAG= Fetch_the_MovieDB_API.class.getSimpleName();
         private View rootView;
@@ -141,9 +144,9 @@ public class MovieGridFragment extends Fragment {
          * @return
          */
         @Override
-        //TODO:Modify to download the configuration and only one of the categories.
+
         public theMovieDB_API_response doInBackground (Integer... params){
-            int category = params[0];
+            int categoryID = params[0];
 
             //http://api.themoviedb.org/3/configuration?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
             Uri.Builder config= BuildBaseUrl()
@@ -152,26 +155,58 @@ public class MovieGridFragment extends Fragment {
                             getString(R.string.theMovieDBAPI_key));
             //Log.d(LOG_TAG, "fetch config with: " + config );
 
-
-            //http://api.themoviedb.org/3/movie/popular?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
-            Uri.Builder popular= BuildBaseUrl()
+            Uri.Builder categoryURL = BuildBaseUrl()
                     .appendPath("movie")
                     .appendPath("popular")
                     .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                             getString(R.string.theMovieDBAPI_key));
-            Log.d(LOG_TAG, "fetch popular with: " + popular );
 
-            //http://api.themoviedb.org/3/movie/top_rated?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
-            Uri.Builder top_rated=BuildBaseUrl()
-                    .appendPath("movie")
-                    .appendPath("top_rated")
-                    .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
-                            getString(R.string.theMovieDBAPI_key));
-            Log.d(LOG_TAG, "fetch top rated with: " + top_rated );
+
+            switch(categoryID){
+                case R.id.popButton :
+                    //http://api.themoviedb.org/3/movie/popular?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
+                    categoryURL= BuildBaseUrl()
+                            .appendPath("movie")
+                            .appendPath("popular")
+                            .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
+                                    getString(R.string.theMovieDBAPI_key));
+                    //Log.d(LOG_TAG, "fetch popular with: " + categoryURL );
+                    break;
+                case R.id.topButton :
+                    //http://api.themoviedb.org/3/movie/top_rated?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
+                    categoryURL=BuildBaseUrl()
+                            .appendPath("movie")
+                            .appendPath("top_rated")
+                            .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
+                                    getString(R.string.theMovieDBAPI_key));
+                    //Log.d(LOG_TAG, "fetch top rated with: " + categoryURL );
+                    break;
+                case R.id.nowPlayingButton :
+                    //http://api.themoviedb.org/3/movie/now_playing?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
+                    categoryURL=BuildBaseUrl()
+                            .appendPath("movie")
+                            .appendPath("now_playing")
+                            .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
+                                    getString(R.string.theMovieDBAPI_key));
+                    //Log.d(LOG_TAG, "fetch now playing movies with: " + categoryURL );
+                    break;
+                case R.id.upcomingButton :
+                    categoryURL=BuildBaseUrl()
+                            .appendPath("movie")
+                            .appendPath("upcoming")
+                            .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
+                                    getString(R.string.theMovieDBAPI_key));
+                    //Log.d(LOG_TAG, "fetch upcoming movies with: " + categoryURL );
+                    break;
+                default :
+                    //We should not reach this state
+                    Log.e(LOG_TAG, "Error with handling the category of the selected button");
+                    break;
+            }
+
 
             return new theMovieDB_API_response(getData(config.build().toString()),
-                    getData(popular.build().toString()),
-                    getData(top_rated.build().toString()));
+                    getData(categoryURL.build().toString()));
         }
 
 
@@ -190,13 +225,13 @@ public class MovieGridFragment extends Fragment {
 
             try{
                 //turn the String JSON to JSONObjects
+
                 JSON_response= new theMovieDB_JSON(API_full_response.getConfiguration_str(),
-                        API_full_response.getPopular_movies_str(),
-                        API_full_response.getTop_Rated_movies_str());
+                        API_full_response.getCategory_str() );
 
                 //Create the arrays inside allMovieData
-                //TODO:Modify the Data_Extracts so it would only carry the respone from configuration and selected category queries
-                allMovieData = new Data_Extracts(JSON_response.getTopRatedMovie_size(), JSON_response.getPopularMovie_size());
+
+                allMovieData = new Data_Extracts(JSON_response.getCategory_size());
 
 
                 //Extract the data from JSONObjects and put them in allMovieData

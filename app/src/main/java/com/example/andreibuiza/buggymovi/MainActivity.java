@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
     }
 
 
-    //TODO: implement event when front menu buttons are selected
+    //TODO: The detail fragment will be activated when 'latest movie' is selected by the user
     public void OnButtonSelected(int buttonID){
         MovieGridFragment gridViewFragment = new MovieGridFragment();
 
