@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -33,8 +34,23 @@ import java.net.URL;
 public class MovieGridFragment extends Fragment {
     private final String LOG_TAG= MovieGridFragment.class.getSimpleName();
     private Data_Extracts allMovieData;
-    private String category;
+//    private String category;
+    OnPosterSelectedListener mListener;
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        //This is the check to be used to make sure that the activity has implemented the required callback
+        try {
+            mListener = (OnPosterSelectedListener) context;
+            Log.d(LOG_TAG, "Activity has succesfully implemented callback function for selecting posters");
+        } catch (ClassCastException e) {
+            Log.e(LOG_TAG, "Activity did not implement the required OnPosterSelectedListener");
+            throw new ClassCastException(context.toString() + " must implement OnPosterSelectedListener");
+
+        }
+    }
 
     @Override
     public void onCreate (Bundle savedInstanceState){
@@ -47,12 +63,14 @@ public class MovieGridFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.moviegrid, container, false);
 
-
         Bundle bundle = this.getArguments();
         int category = bundle.getInt(getString(R.string.menuToGridKey));
 
         //start downloading the data
         new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
+
+        //TODO: modify the tool bar title to the category selected
+
 
         return rootView;
     }
@@ -60,6 +78,12 @@ public class MovieGridFragment extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+    }
+
+    //TODO: create the detail fragment functionality
+    // Container Activity must implement this interface
+    public interface OnPosterSelectedListener {
+        public void OnPosterSelected(Movie_element movieSelected, String baseImgURL);
     }
 
     //TODO: Create a spinner menu so the user can change the category without going back to the main page.
@@ -249,6 +273,21 @@ public class MovieGridFragment extends Fragment {
             //The ImageAdapter expects the imageURL to be ready, I cannot add data to it dynamically like
             //ArrayAdapter from the Weather Application.
             gridview.setAdapter(new ImageAdapter(getActivity()));
+
+
+            //TODO: Setup the callback function when a poster is selected by the user
+            gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
+
+                    //sets up the Activity's implementation to activate when a poster is clicked
+                    //set the URL to have w780
+                    mListener.OnPosterSelected(allMovieData.getCatMovies()[i], allMovieData.getBaseImgURL(700));
+
+                }
+            });
+
+
         }
 
 
