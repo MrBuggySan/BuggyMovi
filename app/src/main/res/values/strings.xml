@@ -15,4 +15,5 @@
     <string name="nowPlaying">Now Playing</string>
     <string name="upcoming">Upcoming Movies</string>
     <string name="latest">Latest Movie</string>
+    <string name="AboutMenu">About</string>
 </resources>

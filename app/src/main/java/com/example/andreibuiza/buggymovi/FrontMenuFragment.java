@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +44,15 @@ public class FrontMenuFragment extends Fragment implements View.OnClickListener{
 
         //Set the onClick event for each button
         Button myButton=null;
-        int[] buttonIds= new int[]{R.id.popButton, R.id.topButton, R.id.nowPlayingButton, R.id.upcomingButton, R.id.latestButton};
+        int[] buttonIds= new int[]{R.id.popButton, R.id.topButton, R.id.nowPlayingButton, R.id.upcomingButton};
         for (int i = 0 ; i < buttonIds.length ; i++){
             myButton=(Button) rootView.findViewById(buttonIds[i]);
             myButton.setOnClickListener(this);
         }
+
+        //Change the title bar to the title of the app
+        Toolbar myToolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        myToolbar.setTitle(getString(R.string.app_name));
 
         //TODO:Improve aesthetics of the front page fragment, prettify
 

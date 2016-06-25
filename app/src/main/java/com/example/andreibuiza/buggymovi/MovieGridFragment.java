@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +70,8 @@ public class MovieGridFragment extends Fragment {
         //start downloading the data
         new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
 
-        //TODO: modify the tool bar title to the category selected
+        //modify the toolbar
+        changeToolbarTitle(category);
 
 
         return rootView;
@@ -80,11 +82,38 @@ public class MovieGridFragment extends Fragment {
         super.onStart();
     }
 
-    //TODO: create the detail fragment functionality
+
     // Container Activity must implement this interface
     public interface OnPosterSelectedListener {
         public void OnPosterSelected(Movie_element movieSelected, String baseImgURL);
     }
+
+    /**
+     * Change the toolbar title of the GridView fragment
+     * @param categoryID
+     */
+    public void changeToolbarTitle(int categoryID){
+        Toolbar myToolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        switch(categoryID){
+            case R.id.popButton :
+                myToolbar.setTitle(getString(R.string.popular));
+                break;
+            case R.id.topButton :
+                myToolbar.setTitle(getString(R.string.top));
+                break;
+            case R.id.nowPlayingButton :
+                myToolbar.setTitle(getString(R.string.nowPlaying));
+                break;
+            case R.id.upcomingButton :
+                myToolbar.setTitle(getString(R.string.upcoming));
+                break;
+//            case R.id.latestButton :
+//                myToolbar.setTitle(getString(R.string.latest));
+//                break;
+        }
+
+    }
+
 
     //TODO: Create a spinner menu so the user can change the category without going back to the main page.
 
@@ -275,7 +304,7 @@ public class MovieGridFragment extends Fragment {
             gridview.setAdapter(new ImageAdapter(getActivity()));
 
 
-            //TODO: Setup the callback function when a poster is selected by the user
+
             gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){

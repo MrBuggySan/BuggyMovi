@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        //TODO: Add an about on the overflow menu
+        //myToolbar.inflateMenu(R.menu.main);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         DetailFragment detailFragment = new DetailFragment();
         Bundle args = new Bundle();
 
-        //TODO: set the arguments of the DetailFragment
+
         args.putString(getString(R.string.baseImgURLkey), baseImgURL);
         args.putString(getString(R.string.posterURLkey), movieSelected.getPosterURL());
         args.putString(getString(R.string.titlekey), movieSelected.getTitle());
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         args.putString(getString(R.string.releaseDatekey), movieSelected.getReleaseDate());
 
         detailFragment.setArguments(args);
-        //TODO: launch the details fragment
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, detailFragment);
         transaction.addToBackStack(null);
