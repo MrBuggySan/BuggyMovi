@@ -2,7 +2,8 @@ package com.example.andreibuiza.buggymovi;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -72,10 +73,15 @@ public class DetailFragment extends Fragment{
         TextView releaseDate = (TextView) rootView.findViewById(R.id.releaseDate);
         releaseDate.setText("Release Date: "+ releaseDateText);
 
-        Toolbar myToolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+
+
+        //turn off the spinner from moviegridfragment
+        ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
+        myToolbar.setDisplayShowCustomEnabled(false);
+        myToolbar.setDisplayShowTitleEnabled(true);
         myToolbar.setTitle(title);
 
-        //TODO: apply a back button on the toolbar
+
 
 
 

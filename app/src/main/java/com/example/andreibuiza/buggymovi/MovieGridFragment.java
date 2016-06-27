@@ -114,10 +114,11 @@ public class MovieGridFragment extends Fragment {
         categorySpinner.setAdapter(spinnerContent);
 
         ActionBar myToolbar = (ActionBar) ((AppCompatActivity) getActivity()).getSupportActionBar();
+        myToolbar.setDisplayShowTitleEnabled(false);
         myToolbar.setDisplayShowCustomEnabled(true);
         myToolbar.setCustomView(vi);
 
-        myToolbar.setDisplayShowTitleEnabled(false);
+
 
         switch(categoryID){
             case R.id.popButton :

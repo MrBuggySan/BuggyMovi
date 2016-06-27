@@ -10,7 +10,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements FrontMenuFragment.OnButtonSelectedListener,
         MovieGridFragment.OnPosterSelectedListener{
     //TODO: Make sure that the user's internet is connected
-
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
     private theMovieDB_API_response API_full_response;
 
     @Override
@@ -19,9 +19,11 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         setContentView(R.layout.activity_main);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        //myToolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(myToolbar);
 
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        //getSupportActionBar().setDisplayShowCustomEnabled(false);
+        //Log.d(LOG_TAG,"we have entered onCreate");
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();

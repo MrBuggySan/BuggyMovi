@@ -4,7 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,7 @@ public class FrontMenuFragment extends Fragment implements View.OnClickListener{
         super.onAttach(context);
         try {
             mListener = (OnButtonSelectedListener) context;
-            Log.d(LOG_TAG, "Activity has succesfully implemented callback function");
+            //Log.d(LOG_TAG, "Activity has succesfully implemented callback function");
         } catch (ClassCastException e) {
             Log.e(LOG_TAG, "Activity did not implement the required OnButtonSelectedListener");
             throw new ClassCastException(context.toString() + " must implement OnButtonSelectedListener");
@@ -51,10 +52,13 @@ public class FrontMenuFragment extends Fragment implements View.OnClickListener{
         }
 
         //Change the title bar to the title of the app
-        Toolbar myToolbar = (Toolbar) getActivity().findViewById(R.id.my_toolbar);
+        ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
+        myToolbar.setDisplayShowCustomEnabled(false);
+        myToolbar.setDisplayShowTitleEnabled(true);
         myToolbar.setTitle(getString(R.string.app_name));
 
         //TODO:Improve aesthetics of the front page fragment, prettify
+
 
         return rootView;
 
