@@ -36,7 +36,7 @@ import java.util.ArrayList;
 /**
  * Created by AndreiBuiza on 6/11/2016.
  */
-public class MovieGridFragment extends Fragment {
+public class MovieGridFragment extends Fragment  {
     private final String LOG_TAG= MovieGridFragment.class.getSimpleName();
     private Data_Extracts allMovieData;
 
@@ -49,7 +49,7 @@ public class MovieGridFragment extends Fragment {
         //This is the check to be used to make sure that the activity has implemented the required callback
         try {
             mListener = (OnPosterSelectedListener) context;
-            Log.d(LOG_TAG, "Activity has succesfully implemented callback function for selecting posters");
+            //Log.d(LOG_TAG, "Activity has succesfully implemented callback function for selecting posters");
         } catch (ClassCastException e) {
             Log.e(LOG_TAG, "Activity did not implement the required OnPosterSelectedListener");
             throw new ClassCastException(context.toString() + " must implement OnPosterSelectedListener");
@@ -77,6 +77,7 @@ public class MovieGridFragment extends Fragment {
         //setHasOptionsMenu(true);
 
         toolBarSetup(category, inflater);
+
 
         return rootView;
     }
@@ -107,6 +108,10 @@ public class MovieGridFragment extends Fragment {
         spinnerContentValues.add(getString(R.string.nowPlaying));
         spinnerContentValues.add(getString(R.string.upcoming));
 
+        //Set the event callback
+        categorySpinner.setOnItemSelectedListener((MainActivity) getActivity());
+
+        //TODO: Style the spinner menu better
         ArrayAdapter<String> spinnerContent = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_spinner_item,
                 spinnerContentValues);
@@ -139,6 +144,7 @@ public class MovieGridFragment extends Fragment {
         }
 
     }
+
 
     public class ImageAdapter extends BaseAdapter {
         private Context mContext;
@@ -185,8 +191,6 @@ public class MovieGridFragment extends Fragment {
 
     }
 
-
-
     public class Fetch_the_MovieDB_API extends AsyncTask<Integer, String, theMovieDB_API_response> {
         private final String LOG_TAG= Fetch_the_MovieDB_API.class.getSimpleName();
         private View rootView;
@@ -199,15 +203,15 @@ public class MovieGridFragment extends Fragment {
 
         @Override
         public void onPreExecute(){
-            /**
-             * Loading Toast
-             */
-
-            CharSequence text = "Loading...";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(mContext, text, duration);
-            toast.show();
+//            /**
+//             * Loading Toast
+//             */
+//
+//            CharSequence text = "Loading...";
+//            int duration = Toast.LENGTH_SHORT;
+//
+//            Toast toast = Toast.makeText(mContext, text, duration);
+//            toast.show();
 
         }
 
@@ -298,8 +302,18 @@ public class MovieGridFragment extends Fragment {
             theMovieDB_JSON JSON_response;
 
             try{
-                //turn the String JSON to JSONObjects
+                //If there is no internet connection then we do not display anything on the fragment
+                if( API_full_response.getConfiguration_str() == null){
 
+                    CharSequence text = "Please connect to the internet then restart the app...";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(mContext, text, duration);
+                    toast.show();
+
+                    return ;
+                }
+                //turn the String JSON to JSONObjects
                 JSON_response= new theMovieDB_JSON(API_full_response.getConfiguration_str(),
                         API_full_response.getCategory_str() );
 

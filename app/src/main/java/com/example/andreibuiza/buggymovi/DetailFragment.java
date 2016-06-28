@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,8 +37,8 @@ public class DetailFragment extends Fragment{
         int  ratingValue = bundle.getInt(getString(R.string.ratingkey));
         String  releaseDateText = bundle.getString(getString(R.string.releaseDatekey));
 
-        Log.d(LOG_TAG, "img URL to be used: " + baseImgURL + posterURL);
-        Log.d(LOG_TAG, "Title of the movie: " + title);
+//        Log.d(LOG_TAG, "img URL to be used: " + baseImgURL + posterURL);
+//        Log.d(LOG_TAG, "Title of the movie: " + title);
 
 
 

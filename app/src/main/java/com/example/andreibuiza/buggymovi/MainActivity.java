@@ -4,14 +4,18 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 public class MainActivity extends AppCompatActivity implements FrontMenuFragment.OnButtonSelectedListener,
-        MovieGridFragment.OnPosterSelectedListener{
+        MovieGridFragment.OnPosterSelectedListener, AdapterView.OnItemSelectedListener{
     //TODO: Make sure that the user's internet is connected
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private theMovieDB_API_response API_full_response;
+    private int currentCategoryID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +23,23 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         setContentView(R.layout.activity_main);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        //myToolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(myToolbar);
 
-        //getSupportActionBar().setDisplayShowCustomEnabled(false);
-        //Log.d(LOG_TAG,"we have entered onCreate");
-
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();
+            //There's a bug with the back stack when working with this front page, I will take it out for now
+            // getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();
+
+            MovieGridFragment gridViewFragment = new MovieGridFragment();
+            currentCategoryID = R.id.popButton;
+            int buttonID= currentCategoryID;
+            //set the argument of the MovieGridFragment
+            Bundle args = new Bundle();
+            args.putInt(getString(R.string.menuToGridKey), buttonID);
+            gridViewFragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction().add(R.id.container,gridViewFragment).commit();
+
+            Log.d(LOG_TAG, "Activity onCreate");
         }
     }
 
@@ -49,9 +62,71 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos);
+
+        /**
+         * Loading Toast
+         */
+
+//        CharSequence text = "Selected: " + pos;
+//        int duration = Toast.LENGTH_SHORT;
+//
+//        Toast toast = Toast.makeText(this, text, duration);
+//        toast.show();
+
+
+
+        int buttonID = 0;
+        switch (pos){
+            case 0: buttonID = R.id.popButton;
+                break;
+            case 1: buttonID = R.id.topButton;
+                break;
+            case 2: buttonID = R.id.nowPlayingButton;
+                break;
+            case 3: buttonID = R.id.upcomingButton;
+                break;
+        }
+
+        if(buttonID != currentCategoryID){
+            //Why can't I call OnButtonSelected in this function !?!
+            //OnButtonSelected
+
+            //This is the copy of OnButtonSelected
+            MovieGridFragment gridViewFragment = new MovieGridFragment();
+            currentCategoryID = buttonID;
+            //set the argument of the MovieGridFragment
+            Bundle args = new Bundle();
+            args.putInt(getString(R.string.menuToGridKey), buttonID);
+            gridViewFragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, gridViewFragment);
+            //transaction.addToBackStack(null);
+            transaction.commit();
+
+
+
+        }
+
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
+    @Override
     //TODO: The detail fragment will be activated when 'latest movie' is selected by the user
     public void OnButtonSelected(int buttonID){
         MovieGridFragment gridViewFragment = new MovieGridFragment();
+
+        currentCategoryID = buttonID;
 
         //set the argument of the MovieGridFragment
         Bundle args = new Bundle();
@@ -62,8 +137,11 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         transaction.replace(R.id.container, gridViewFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
+
     }
 
+    @Override
     public void OnPosterSelected(Movie_element movieSelected, String baseImgURL){
         DetailFragment detailFragment = new DetailFragment();
         Bundle args = new Bundle();
@@ -86,8 +164,8 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
     }
 
 
-    //TODO: Switch the fragments when the user selects a new category, the fragment to be replaced will not be added to the back stack
-    //public void
+
+
 
 
 

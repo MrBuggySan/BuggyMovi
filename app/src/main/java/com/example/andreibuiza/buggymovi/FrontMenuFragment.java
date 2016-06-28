@@ -40,7 +40,8 @@ public class FrontMenuFragment extends Fragment implements View.OnClickListener{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //return super.onCreateView(inflater, container, savedInstanceState);
+
+
         View rootView = inflater.inflate(R.layout.frontmenufragment, container, false);
 
         //Set the onClick event for each button
@@ -57,8 +58,8 @@ public class FrontMenuFragment extends Fragment implements View.OnClickListener{
         myToolbar.setDisplayShowTitleEnabled(true);
         myToolbar.setTitle(getString(R.string.app_name));
 
-        //TODO:Improve aesthetics of the front page fragment, prettify
-
+        //TODO:Improve aesthetics of the front page fragment, prettify it!
+        Log.d(LOG_TAG, "onCreate is working... ");
 
         return rootView;
 
