@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -29,13 +30,6 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp"/>
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,4 +38,13 @@
         android:id="@+id/textView2"
         android:paddingBottom="10dp"
         android:paddingTop="10dp"/>
+
+    <ImageView
+        android:layout_width="364dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:src="@drawable/themoviedb"
+        android:layout_weight="0.36" />
 </LinearLayout>
