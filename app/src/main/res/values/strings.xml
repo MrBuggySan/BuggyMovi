@@ -15,5 +15,11 @@
     <string name="nowPlaying">Now Playing</string>
     <string name="upcoming">Upcoming Movies</string>
     <string name="latest">Latest Movie</string>
+
+
     <string name="AboutMenu">About</string>
+    <string name="aboutBlurb1">Welcome to Buggy Movi! Quickly browse through the different categories
+    to discover the next movie you will watch. You can to make your own favourites list which you can use for reference later on.</string>
+    <string name="TMDbnotice">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
+
 </resources>

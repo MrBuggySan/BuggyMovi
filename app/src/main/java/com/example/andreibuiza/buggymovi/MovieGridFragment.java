@@ -145,7 +145,7 @@ public class MovieGridFragment extends Fragment  {
 
     }
 
-
+    //TODO: Move this class onto its own file
     public class ImageAdapter extends BaseAdapter {
         private Context mContext;
 
@@ -180,7 +180,7 @@ public class MovieGridFragment extends Fragment  {
             GridView grid = (GridView) parent.findViewById(R.id.gridView);
             //Log.d(LOG_TAG, "The width of the grid element in pixels is: " + grid.getColumnWidth());
             //Log.d(LOG_TAG, allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getPopularMovies()[position].getPosterURL() );
-            //TODO: setup a default image and the title of a movie when the movie poster is not available.
+            //TODO: setup placeholder and error for Picasso
             Picasso.with(mContext)
                     .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getCatMovies()[position].getPosterURL())
                     .resize(grid.getColumnWidth(),(int) (grid.getColumnWidth()*1.5) )
@@ -203,15 +203,7 @@ public class MovieGridFragment extends Fragment  {
 
         @Override
         public void onPreExecute(){
-//            /**
-//             * Loading Toast
-//             */
-//
-//            CharSequence text = "Loading...";
-//            int duration = Toast.LENGTH_SHORT;
-//
-//            Toast toast = Toast.makeText(mContext, text, duration);
-//            toast.show();
+
 
         }
 

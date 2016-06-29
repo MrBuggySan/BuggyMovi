@@ -3,6 +3,11 @@ package com.example.andreibuiza.buggymovi;
 /**
  * Created by AndreiBuiza on 6/15/2016.
  */
+
+//TODO: To learn more, in order to save and recover the dynamic
+// data using savedInstanceState, you can let this class implement Parcelable.
+// By doing so, you can optimize your app to save dynamic data/state efficiently.
+    // ^^^ from Udacity
 public class Movie_element {
     private String posterURL;
     private String title;

@@ -1,5 +1,6 @@
 package com.example.andreibuiza.buggymovi;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.About) {
+            Intent intent = new Intent (this, AboutActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -34,6 +34,8 @@ public class DetailFragment extends Fragment{
         String  posterURL = bundle.getString(getString(R.string.posterURLkey));
         String  title = bundle.getString(getString(R.string.titlekey));
         String  synopsistext = bundle.getString(getString(R.string.synopsiskey));
+        //TODO: display 1 decimal on this number
+        //TODO: remove the stars (it's too gimmicky, the number should be enough to show the rating)
         int  ratingValue = bundle.getInt(getString(R.string.ratingkey));
         String  releaseDateText = bundle.getString(getString(R.string.releaseDatekey));
 
