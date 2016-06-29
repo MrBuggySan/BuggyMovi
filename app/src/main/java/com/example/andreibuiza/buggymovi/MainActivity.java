@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -145,18 +144,11 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
     }
 
     @Override
-    public void OnPosterSelected(Movie_element movieSelected, String baseImgURL){
+    public void OnPosterSelected(Movie_element movieSelected){
         DetailFragment detailFragment = new DetailFragment();
         Bundle args = new Bundle();
 
-
-        args.putString(getString(R.string.baseImgURLkey), baseImgURL);
-        args.putString(getString(R.string.posterURLkey), movieSelected.getPosterURL());
-        args.putString(getString(R.string.titlekey), movieSelected.getTitle());
-        args.putString(getString(R.string.synopsiskey), movieSelected.getSynopsis());
-        args.putDouble(getString(R.string.ratingkey), movieSelected.getRating());
-        args.putString(getString(R.string.releaseDatekey), movieSelected.getReleaseDate());
-
+        args.putParcelable(getString(R.string.movieSelectedkey), movieSelected);
         detailFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

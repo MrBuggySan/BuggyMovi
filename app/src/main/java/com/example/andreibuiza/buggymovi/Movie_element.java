@@ -1,5 +1,8 @@
 package com.example.andreibuiza.buggymovi;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by AndreiBuiza on 6/15/2016.
  */
@@ -8,8 +11,9 @@ package com.example.andreibuiza.buggymovi;
 // data using savedInstanceState, you can let this class implement Parcelable.
 // By doing so, you can optimize your app to save dynamic data/state efficiently.
     // ^^^ from Udacity
-public class Movie_element {
+public class Movie_element implements Parcelable{
     private String posterURL;
+    private String fullPosterURL;
     private String title;
     private String synopsis;
     private double rating;
@@ -17,6 +21,14 @@ public class Movie_element {
 
     public Movie_element(){
 
+    }
+
+    public String getFullPosterURL() {
+        return fullPosterURL;
+    }
+
+    public void setFullPosterURL(String baseURL) {
+        fullPosterURL = baseURL + posterURL;
     }
 
     public Movie_element(String poster, String title_, String synopsis_, double rating_, String releaseDate_){
@@ -77,4 +89,39 @@ public class Movie_element {
                 ", releaseDate='" + releaseDate + '\'' +
                 '}';
     }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeStringArray(new String[]{posterURL, fullPosterURL, title, synopsis, releaseDate});
+        out.writeDouble(rating);
+    }
+
+    private Movie_element(Parcel in) {
+        String[] data = new String[5];
+
+        in.readStringArray(data);
+        posterURL = data[0];
+        fullPosterURL = data[1];
+        title = data[2];
+        synopsis = data[3];
+        releaseDate = data[4];
+
+        rating = in.readDouble();
+    }
+
+    public static final Parcelable.Creator<Movie_element> CREATOR
+            = new Parcelable.Creator<Movie_element>() {
+        public Movie_element createFromParcel(Parcel in) {
+            return new Movie_element(in);
+        }
+
+        public Movie_element[] newArray(int size) {
+            return new Movie_element[size];
+        }
+    };
+
+
 }

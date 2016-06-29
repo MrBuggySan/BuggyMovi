@@ -29,40 +29,26 @@ public class DetailFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.detailfragment, container, false);
 
         Bundle bundle = this.getArguments();
-        String baseImgURL = bundle.getString(getString(R.string.baseImgURLkey));
-        String  posterURL = bundle.getString(getString(R.string.posterURLkey));
-        String  title = bundle.getString(getString(R.string.titlekey));
-        String  synopsistext = bundle.getString(getString(R.string.synopsiskey));
-        //TODO: display 1 decimal on this number
-        //TODO: remove the stars (it's too gimmicky, the number should be enough to show the rating)
-        double  ratingValue = bundle.getDouble(getString(R.string.ratingkey));
-        String  releaseDateText = bundle.getString(getString(R.string.releaseDatekey));
 
-//        Log.d(LOG_TAG, "img URL to be used: " + baseImgURL + posterURL);
-//        Log.d(LOG_TAG, "Title of the movie: " + title);
-
-
+        Movie_element movieSelected = bundle.getParcelable(getString(R.string.movieSelectedkey));
 
         //TODO: add an image browser to browse through different images related to the movie
         ImageView poster = (ImageView) rootView.findViewById(R.id.posterImageView);
-//        Picasso.with(getContext())
-//                .load(baseImgURL + posterURL)
-//                .resize(poster.getWidth(), (int) (poster.getWidth() * 1.5))
-//                .into(poster);
+
         //TODO: figure out a way to work with dp instead of raw px when drawing the images
         Picasso.with(getContext())
-                .load(baseImgURL + posterURL)
+                .load(movieSelected.getFullPosterURL())
                 .resize(780, (int)(780 * 1.5))
                 .into(poster);
 
         TextView synopsis = (TextView) rootView.findViewById(R.id.sysnopsis);
-        synopsis.setText(synopsistext);
+        synopsis.setText(movieSelected.getSynopsis());
 
         TextView ratingtext = (TextView) rootView.findViewById(R.id.ratingText);
-        ratingtext.setText(ratingValue+" / 10");
+        ratingtext.setText(movieSelected.getRating() + " / 10");
 
         TextView releaseDate = (TextView) rootView.findViewById(R.id.releaseDate);
-        releaseDate.setText("Release Date: "+ releaseDateText);
+        releaseDate.setText("Release Date: "+ movieSelected.getReleaseDate());
 
 
 
@@ -70,10 +56,7 @@ public class DetailFragment extends Fragment{
         ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
         myToolbar.setDisplayShowCustomEnabled(false);
         myToolbar.setDisplayShowTitleEnabled(true);
-        myToolbar.setTitle(title);
-
-
-
+        myToolbar.setTitle(movieSelected.getTitle());
 
 
         return rootView;

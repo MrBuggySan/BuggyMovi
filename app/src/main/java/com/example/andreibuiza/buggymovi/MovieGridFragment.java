@@ -90,7 +90,7 @@ public class MovieGridFragment extends Fragment  {
 
     // Container Activity must implement this interface
     public interface OnPosterSelectedListener {
-        public void OnPosterSelected(Movie_element movieSelected, String baseImgURL);
+        public void OnPosterSelected(Movie_element movieSelected);
     }
 
     /**
@@ -178,8 +178,6 @@ public class MovieGridFragment extends Fragment  {
             //Use Picasso to set the image onto the GridView
             //The poster must fill the width of the grid element
             GridView grid = (GridView) parent.findViewById(R.id.gridView);
-            //Log.d(LOG_TAG, "The width of the grid element in pixels is: " + grid.getColumnWidth());
-            //Log.d(LOG_TAG, allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getPopularMovies()[position].getPosterURL() );
             //TODO: setup placeholder and error for Picasso
             Picasso.with(mContext)
                     .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getCatMovies()[position].getPosterURL())
@@ -337,8 +335,10 @@ public class MovieGridFragment extends Fragment  {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
 
                     //sets up the Activity's implementation to activate when a poster is clicked
-                    //set the URL to have w780
-                    mListener.OnPosterSelected(allMovieData.getCatMovies()[i], allMovieData.getBaseImgURL(700));
+                    //set the URL to have w780, this is the largest poster we can get other than the orginial poster
+                    Movie_element selected_movie = allMovieData.getCatMovies()[i];
+                    selected_movie.setFullPosterURL(allMovieData.getBaseImgURL(700));
+                    mListener.OnPosterSelected(selected_movie);
 
                 }
             });
