@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
 
             getSupportFragmentManager().beginTransaction().add(R.id.container,gridViewFragment).commit();
 
-            Log.d(LOG_TAG, "Activity onCreate");
+            //Log.d(LOG_TAG, "Activity onCreate");
         }
     }
 
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         args.putString(getString(R.string.posterURLkey), movieSelected.getPosterURL());
         args.putString(getString(R.string.titlekey), movieSelected.getTitle());
         args.putString(getString(R.string.synopsiskey), movieSelected.getSynopsis());
-        args.putInt(getString(R.string.ratingkey), movieSelected.getRating());
+        args.putDouble(getString(R.string.ratingkey), movieSelected.getRating());
         args.putString(getString(R.string.releaseDatekey), movieSelected.getReleaseDate());
 
         detailFragment.setArguments(args);

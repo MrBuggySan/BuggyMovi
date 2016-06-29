@@ -14,14 +14,16 @@
             android:layout_height="wrap_content"
             android:id="@+id/posterImageView"
             android:layout_weight="0.05"
-            android:adjustViewBounds="false" />
+            android:adjustViewBounds="false"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Movie Title here"
-            android:id="@+id/movieTitle"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Rating here"
+            android:id="@+id/ratingText"
             android:layout_weight="0.05"
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
@@ -32,26 +34,9 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Synopsis here"
             android:id="@+id/sysnopsis"
-            android:layout_weight="0.05" />
-
-        <RatingBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ratingBar"
             android:layout_weight="0.05"
-            android:clickable="false"
-            android:numStars="10"
-            style="@style/Base.Widget.AppCompat.RatingBar.Indicator"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:paddingBottom="10dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Rating here"
-            android:id="@+id/ratingText"
-            android:layout_weight="0.05" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -60,6 +45,7 @@
             android:text="Release Date here"
             android:id="@+id/releaseDate"
             android:layout_weight="0.05"
+            android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
     </LinearLayout>

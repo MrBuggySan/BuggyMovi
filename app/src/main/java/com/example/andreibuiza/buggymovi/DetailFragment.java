@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -36,7 +35,7 @@ public class DetailFragment extends Fragment{
         String  synopsistext = bundle.getString(getString(R.string.synopsiskey));
         //TODO: display 1 decimal on this number
         //TODO: remove the stars (it's too gimmicky, the number should be enough to show the rating)
-        int  ratingValue = bundle.getInt(getString(R.string.ratingkey));
+        double  ratingValue = bundle.getDouble(getString(R.string.ratingkey));
         String  releaseDateText = bundle.getString(getString(R.string.releaseDatekey));
 
 //        Log.d(LOG_TAG, "img URL to be used: " + baseImgURL + posterURL);
@@ -56,20 +55,11 @@ public class DetailFragment extends Fragment{
                 .resize(780, (int)(780 * 1.5))
                 .into(poster);
 
-
-
-
-        TextView movieTitle = (TextView) rootView.findViewById(R.id.movieTitle);
-        movieTitle.setText(title);
-
         TextView synopsis = (TextView) rootView.findViewById(R.id.sysnopsis);
         synopsis.setText(synopsistext);
 
-        RatingBar rating = (RatingBar) rootView.findViewById(R.id.ratingBar);
-        rating.setRating(ratingValue);
-
         TextView ratingtext = (TextView) rootView.findViewById(R.id.ratingText);
-        ratingtext.setText(ratingValue+"/10");
+        ratingtext.setText(ratingValue+" / 10");
 
         TextView releaseDate = (TextView) rootView.findViewById(R.id.releaseDate);
         releaseDate.setText("Release Date: "+ releaseDateText);

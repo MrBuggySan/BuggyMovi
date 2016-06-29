@@ -12,14 +12,14 @@ public class Movie_element {
     private String posterURL;
     private String title;
     private String synopsis;
-    private int rating;
+    private double rating;
     private String releaseDate;
 
     public Movie_element(){
 
     }
 
-    public Movie_element(String poster, String title_, String synopsis_, int rating_, String releaseDate_){
+    public Movie_element(String poster, String title_, String synopsis_, double rating_, String releaseDate_){
         posterURL=poster;
         title=title_;
         synopsis=synopsis_;
@@ -39,7 +39,7 @@ public class Movie_element {
         return synopsis;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 

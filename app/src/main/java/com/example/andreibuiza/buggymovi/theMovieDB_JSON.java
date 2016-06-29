@@ -82,8 +82,8 @@ public class theMovieDB_JSON {
     /**
      * Get all the ratings of the popular movies
      */
-    private int getCatRating(int i) throws JSONException {
-        return Category.getJSONArray("results").getJSONObject(i).getInt("vote_average");
+    private double getCatRating(int i) throws JSONException {
+        return Category.getJSONArray("results").getJSONObject(i).getDouble("vote_average");
     }
 
       /**
