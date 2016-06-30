@@ -33,7 +33,7 @@ public class theMovieDB_JSON {
 
         //Extract the data
         for(int i = 0 ; i < cat.length; i++){
-            cat[i]= new Movie_element(getCatImageURL_of(i),getCatMovieTitle(i), getCatSynopsis(i), getCatRating(i), getCatReleaseDate(i) );
+            cat[i]= new Movie_element(getCatImageURL_of(i),getCatMovieTitle(i), getCatSynopsis(i), getCatRating(i), getCatReleaseDate(i), getMovieID(i) );
         }
 
 
@@ -62,6 +62,14 @@ public class theMovieDB_JSON {
         //return baseImgURL + Popular_movies.getJSONArray("results").getJSONObject(i).getString("poster_path");
         //Instead of including the baseImgURL I will let Data_Extracts create it later on
         return Category.getJSONArray("results").getJSONObject(i).getString("poster_path");
+    }
+
+    /**
+     * Get the movie ID
+     */
+
+    private int getMovieID(int i) throws  JSONException{
+        return Category.getJSONArray("results").getJSONObject(i).getInt("id");
     }
 
     /**

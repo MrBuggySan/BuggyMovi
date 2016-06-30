@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,13 +51,14 @@ public class DetailFragment extends Fragment{
         TextView releaseDate = (TextView) rootView.findViewById(R.id.releaseDate);
         releaseDate.setText("Release Date: "+ movieSelected.getReleaseDate());
 
-
-
         //turn off the spinner from moviegridfragment
         ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
         myToolbar.setDisplayShowCustomEnabled(false);
         myToolbar.setDisplayShowTitleEnabled(true);
         myToolbar.setTitle(movieSelected.getTitle());
+
+
+        Log.d(LOG_TAG, "This is the movie ID: " + movieSelected.getMovieID());
 
 
         return rootView;

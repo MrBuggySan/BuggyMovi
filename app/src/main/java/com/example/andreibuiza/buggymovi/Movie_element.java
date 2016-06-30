@@ -7,10 +7,6 @@ import android.os.Parcelable;
  * Created by AndreiBuiza on 6/15/2016.
  */
 
-//TODO: To learn more, in order to save and recover the dynamic
-// data using savedInstanceState, you can let this class implement Parcelable.
-// By doing so, you can optimize your app to save dynamic data/state efficiently.
-    // ^^^ from Udacity
 public class Movie_element implements Parcelable{
     private String posterURL;
     private String fullPosterURL;
@@ -18,6 +14,9 @@ public class Movie_element implements Parcelable{
     private String synopsis;
     private double rating;
     private String releaseDate;
+    private int movieID;
+
+
 
     public Movie_element(){
 
@@ -31,12 +30,14 @@ public class Movie_element implements Parcelable{
         fullPosterURL = baseURL + posterURL;
     }
 
-    public Movie_element(String poster, String title_, String synopsis_, double rating_, String releaseDate_){
+    public Movie_element(String poster, String title_, String synopsis_, double rating_, String releaseDate_,
+                         int movieID_){
         posterURL=poster;
         title=title_;
         synopsis=synopsis_;
         rating=rating_;
         releaseDate=releaseDate_;
+        movieID=movieID_;
     }
 
     public String getPosterURL() {
@@ -57,6 +58,14 @@ public class Movie_element implements Parcelable{
 
     public String getReleaseDate() {
         return releaseDate;
+    }
+
+    public int getMovieID() {
+        return movieID;
+    }
+
+    public void setMovieID(int movieID) {
+        this.movieID = movieID;
     }
 
     public void setPosterURL(String posterURL) {

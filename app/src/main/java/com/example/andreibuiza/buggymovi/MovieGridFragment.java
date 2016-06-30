@@ -189,6 +189,7 @@ public class MovieGridFragment extends Fragment  {
 
     }
 
+
     public class Fetch_the_MovieDB_API extends AsyncTask<Integer, String, theMovieDB_API_response> {
         private final String LOG_TAG= Fetch_the_MovieDB_API.class.getSimpleName();
         private View rootView;
@@ -230,6 +231,7 @@ public class MovieGridFragment extends Fragment  {
                             getString(R.string.theMovieDBAPI_key));
 
 
+            //Only download the selected movie category
             switch(categoryID){
                 case R.id.popButton :
                     //http://api.themoviedb.org/3/movie/popular?api_key=7a0f090baebf83c2c4b2e49a59a85ebc
@@ -295,7 +297,7 @@ public class MovieGridFragment extends Fragment  {
                 //If there is no internet connection then we do not display anything on the fragment
                 if( API_full_response.getConfiguration_str() == null){
 
-                    CharSequence text = "Please connect to the internet then restart the app...";
+                    CharSequence text = "Please connect to the internet and then restart the app...";
                     int duration = Toast.LENGTH_LONG;
 
                     Toast toast = Toast.makeText(mContext, text, duration);
@@ -303,6 +305,11 @@ public class MovieGridFragment extends Fragment  {
 
                     return ;
                 }
+
+
+
+
+
                 //turn the String JSON to JSONObjects
                 JSON_response= new theMovieDB_JSON(API_full_response.getConfiguration_str(),
                         API_full_response.getCategory_str() );

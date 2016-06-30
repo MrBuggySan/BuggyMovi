@@ -4,12 +4,6 @@
     <string name="theMovieDBAPI_key">7a0f090baebf83c2c4b2e49a59a85ebc</string>
     <string name="menuToGridKey">menuToGridKey</string>
 
-    <!--<string name="baseImgURLkey">baseImgURL</string>-->
-    <!--<string name="posterURLkey">posterURL</string>-->
-    <!--<string name="titlekey">title</string>-->
-    <!--<string name="synopsiskey">synopsis</string>-->
-    <!--<string name="ratingkey">rating</string>-->
-    <!--<string name="releaseDatekey">releaseDate</string>-->
 
     <string name="movieSelectedkey">movieselected</string>
 
