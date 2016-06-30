@@ -14,7 +14,11 @@ public class Movie_element implements Parcelable{
     private String synopsis;
     private double rating;
     private String releaseDate;
-    private int movieID;
+    private String movieID;
+    //assume all clips are going to be from YouTube, only work with 1 trailer per movie
+    private String movieTrailerkey;
+    //The size of the String array is determined by the results array size
+    private movieReview[] movieReviews;
 
 
 
@@ -37,7 +41,7 @@ public class Movie_element implements Parcelable{
         synopsis=synopsis_;
         rating=rating_;
         releaseDate=releaseDate_;
-        movieID=movieID_;
+        movieID=Integer.toString(movieID_);
     }
 
     public String getPosterURL() {
@@ -60,11 +64,11 @@ public class Movie_element implements Parcelable{
         return releaseDate;
     }
 
-    public int getMovieID() {
+    public String getMovieID() {
         return movieID;
     }
 
-    public void setMovieID(int movieID) {
+    public void setMovieID(String movieID) {
         this.movieID = movieID;
     }
 
@@ -88,15 +92,46 @@ public class Movie_element implements Parcelable{
         this.releaseDate = releaseDate;
     }
 
+    public String getMovieTrailerkey() {
+        return movieTrailerkey;
+    }
+
+    public void setMovieTrailerkey(String movieTrailerkey) {
+        this.movieTrailerkey = movieTrailerkey;
+    }
+
+    public movieReview[] getMovieReviews() {
+        return movieReviews;
+    }
+
+    public void setMovieReviews(movieReview[] movieReviews) {
+        this.movieReviews = movieReviews;
+    }
+
+    public boolean hasTrailer(){
+        if(movieTrailerkey!=null){
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
-        return "Movie_element{" +
+       String first=  "Movie_element{" +
                 "posterURL='" + posterURL + '\'' +
+                ", fullPosterURL='" + fullPosterURL + '\'' +
                 ", title='" + title + '\'' +
                 ", synopsis='" + synopsis + '\'' +
                 ", rating=" + rating +
                 ", releaseDate='" + releaseDate + '\'' +
-                '}';
+                ", movieID='" + movieID + '\'' +
+                ", movieTrailerkey='" + movieTrailerkey;
+        String second= "";
+        for(int i = 0 ; i < movieReviews.length ; i++){
+            second+= " Review #: "+ i + " " +  movieReviews[i].toString();
+        }
+
+        return first + second ;
     }
 
     public int describeContents() {
