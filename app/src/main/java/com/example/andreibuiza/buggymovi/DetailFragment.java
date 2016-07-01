@@ -72,9 +72,10 @@ public class DetailFragment extends Fragment{
 
 
         //if the selected movie does not already have the movie review and movie trailer, the download it
-        if(!movieSelected.hasTrailer()){
-            new FetchTrailerandReviews().execute();
-        }
+//        if(!movieSelected.hasTrailer()){
+//            new FetchTrailerandReviews().execute();
+//        }
+        new FetchTrailerandReviews().execute();
 
 
         return rootView;
@@ -135,13 +136,30 @@ public class DetailFragment extends Fragment{
             rawMovieReviewResponse API_full_response = JSON_response_str;
 
             try{
-
                 //turn the String JSON to JSONObjects
                 JSONObject movieTrailerJSON = new JSONObject(API_full_response.getMovieTrailer_str());
                 JSONObject movieReviewJSON = new JSONObject(API_full_response.getMovieReview_str());
 
                 //Extract the movie trailer data from movieTrailerJSON and put them in movieSelected
-                movieSelected.setMovieTrailerkey( movieTrailerJSON.getJSONArray("results").getJSONObject(0).getString("key") );
+                if(movieTrailerJSON.getJSONArray("results").length() == 0){
+                    //no trailer available
+                }else{
+                    movieTrailer[] movieTrailers_temp = new movieTrailer[movieTrailerJSON.getJSONArray("results").length()];
+                    for(int i = 0; i < movieTrailers_temp.length ; i++){
+                        movieTrailers_temp[i]= new movieTrailer(movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("key"),
+                                movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("name"),
+                                movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("site"),
+                                movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("type"));
+
+                        Log.d(LOG_TAG, movieTrailers_temp[i].toString() );
+                    }
+                    movieSelected.setMovieTrailers( movieTrailers_temp );
+
+                }
+
+
+
+
 
                 //Extract the movie trailer data from movieTrailerJSON and put them in movieSelected
                 if(movieReviewJSON.getJSONArray("results").length() == 0){
@@ -155,20 +173,17 @@ public class DetailFragment extends Fragment{
 
 
                     for(int i = 0 ; i < movieReviews_temp.length ; i++){
-                        //TODO: extracting the content data from the JSON is not working out too well, I have to fix that.
-                        //                    movieReviews_temp[i]= new movieReview( movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("author"),
-                        //                            movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("content"));
+                        //TODO: extracting the review content data from the JSON is not working out too well, I have to fix that.
+//                        movieReviews_temp[i]= new movieReview( movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("author"),
+//                            movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("content"));
 
                         movieReviews_temp[i]= new movieReview( movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("author"),
                                 "This is where the content should be");
+
                         Log.d(LOG_TAG, movieReviews_temp[i].toString());
                     }
                     movieSelected.setMovieReviews(movieReviews_temp);
                 }
-
-
-
-
                 //Log.d(LOG_TAG, movieSelected.toString());
 
             }catch(JSONException e){

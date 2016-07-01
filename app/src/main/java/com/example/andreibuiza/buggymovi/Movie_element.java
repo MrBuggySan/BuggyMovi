@@ -15,8 +15,7 @@ public class Movie_element implements Parcelable{
     private double rating;
     private String releaseDate;
     private String movieID;
-    //assume all clips are going to be from YouTube, only work with 1 trailer per movie
-    private String movieTrailerkey;
+    private movieTrailer[] movieTrailers;
     //The size of the String array is determined by the results array size
     private movieReview[] movieReviews;
 
@@ -92,12 +91,12 @@ public class Movie_element implements Parcelable{
         this.releaseDate = releaseDate;
     }
 
-    public String getMovieTrailerkey() {
-        return movieTrailerkey;
+    public movieTrailer[] getMovieTrailers() {
+        return movieTrailers;
     }
 
-    public void setMovieTrailerkey(String movieTrailerkey) {
-        this.movieTrailerkey = movieTrailerkey;
+    public void setMovieTrailers(movieTrailer[] movieTrailers) {
+        this.movieTrailers = movieTrailers;
     }
 
     public movieReview[] getMovieReviews() {
@@ -108,31 +107,33 @@ public class Movie_element implements Parcelable{
         this.movieReviews = movieReviews;
     }
 
-    public boolean hasTrailer(){
-        if(movieTrailerkey!=null){
-            return true;
-        }
-        return false;
-    }
+    //TODO: figure out a way to efficiently test this.
+//    public boolean hasTrailer(){
+//        if(movieTrailerkey!=null){
+//            return true;
+//        }
+//        return false;
+//    }
 
-    @Override
-    public String toString() {
-       String first=  "Movie_element{" +
-                "posterURL='" + posterURL + '\'' +
-                ", fullPosterURL='" + fullPosterURL + '\'' +
-                ", title='" + title + '\'' +
-                ", synopsis='" + synopsis + '\'' +
-                ", rating=" + rating +
-                ", releaseDate='" + releaseDate + '\'' +
-                ", movieID='" + movieID + '\'' +
-                ", movieTrailerkey='" + movieTrailerkey;
-        String second= "";
-        for(int i = 0 ; i < movieReviews.length ; i++){
-            second+= " Review #: "+ i + " " +  movieReviews[i].toString();
-        }
-
-        return first + second ;
-    }
+    //TODO: make a new toString
+//    @Override
+//    public String toString() {
+//       String first=  "Movie_element{" +
+//                "posterURL='" + posterURL + '\'' +
+//                ", fullPosterURL='" + fullPosterURL + '\'' +
+//                ", title='" + title + '\'' +
+//                ", synopsis='" + synopsis + '\'' +
+//                ", rating=" + rating +
+//                ", releaseDate='" + releaseDate + '\'' +
+//                ", movieID='" + movieID + '\'' +
+//                ", movieTrailerkey='" + movieTrailerkey;
+//        String second= "";
+//        for(int i = 0 ; i < movieReviews.length ; i++){
+//            second+= " Review #: "+ i + " " +  movieReviews[i].toString();
+//        }
+//
+//        return first + second ;
+//    }
 
     public int describeContents() {
         return 0;
