@@ -16,8 +16,9 @@ public class Movie_element implements Parcelable{
     private String releaseDate;
     private String movieID;
     private movieTrailer[] movieTrailers;
-    //The size of the String array is determined by the results array size
     private movieReview[] movieReviews;
+    private boolean loadedTrailer;
+    private boolean loadedReview;
 
 
 
@@ -41,6 +42,10 @@ public class Movie_element implements Parcelable{
         rating=rating_;
         releaseDate=releaseDate_;
         movieID=Integer.toString(movieID_);
+
+
+        loadedReview=false;
+        loadedReview=false;
     }
 
     public String getPosterURL() {
@@ -96,6 +101,7 @@ public class Movie_element implements Parcelable{
     }
 
     public void setMovieTrailers(movieTrailer[] movieTrailers) {
+        loadedTrailer=true;
         this.movieTrailers = movieTrailers;
     }
 
@@ -104,36 +110,34 @@ public class Movie_element implements Parcelable{
     }
 
     public void setMovieReviews(movieReview[] movieReviews) {
+        loadedReview= true;
         this.movieReviews = movieReviews;
     }
 
-    //TODO: figure out a way to efficiently test this.
-//    public boolean hasTrailer(){
-//        if(movieTrailerkey!=null){
-//            return true;
-//        }
-//        return false;
-//    }
 
-    //TODO: make a new toString
-//    @Override
-//    public String toString() {
-//       String first=  "Movie_element{" +
-//                "posterURL='" + posterURL + '\'' +
-//                ", fullPosterURL='" + fullPosterURL + '\'' +
-//                ", title='" + title + '\'' +
-//                ", synopsis='" + synopsis + '\'' +
-//                ", rating=" + rating +
-//                ", releaseDate='" + releaseDate + '\'' +
-//                ", movieID='" + movieID + '\'' +
-//                ", movieTrailerkey='" + movieTrailerkey;
-//        String second= "";
-//        for(int i = 0 ; i < movieReviews.length ; i++){
-//            second+= " Review #: "+ i + " " +  movieReviews[i].toString();
-//        }
-//
-//        return first + second ;
-//    }
+    public boolean hasLoadedTrailerandReview(){
+        if(loadedReview == true && loadedTrailer == true){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check the movieTrailers and movieReviews variables manually from debugger.
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "Movie_element{" +
+                "posterURL='" + posterURL + '\'' +
+                ", fullPosterURL='" + fullPosterURL + '\'' +
+                ", title='" + title + '\'' +
+                ", synopsis='" + synopsis + '\'' +
+                ", rating=" + rating +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", movieID='" + movieID + '\'' +
+                '}';
+    }
 
     public int describeContents() {
         return 0;

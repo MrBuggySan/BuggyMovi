@@ -46,7 +46,7 @@ public class DetailFragment extends Fragment{
 
         movieSelected = bundle.getParcelable(getString(R.string.movieSelectedkey));
 
-        //TODO: add an image browser to browse through different images related to the movie
+        //TODO: add an image browser/carousel to browse through different images related to the movie
         ImageView poster = (ImageView) rootView.findViewById(R.id.posterImageView);
 
         //TODO: figure out a way to work with dp instead of raw px when drawing the images
@@ -71,11 +71,15 @@ public class DetailFragment extends Fragment{
         myToolbar.setTitle(movieSelected.getTitle());
 
 
+
         //if the selected movie does not already have the movie review and movie trailer, the download it
-//        if(!movieSelected.hasTrailer()){
-//            new FetchTrailerandReviews().execute();
-//        }
-        new FetchTrailerandReviews().execute();
+        if(!movieSelected.hasLoadedTrailerandReview()){
+            new FetchTrailerandReviews().execute();
+        }
+
+
+
+
 
 
         return rootView;
@@ -108,7 +112,7 @@ public class DetailFragment extends Fragment{
                     .appendPath("videos")
                     .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                             getString(R.string.theMovieDBAPI_key));
-            Log.d(LOG_TAG, "fetch movie trailer with: " + trailer );
+//            Log.d(LOG_TAG, "fetch movie trailer with: " + trailer );
 
             //movie reviews
             //http://api.themoviedb.org/3/movie/269149/reviews?api_key=7a0f090baebf83c2c4b2e49a59a85ebc&page=1
@@ -118,7 +122,7 @@ public class DetailFragment extends Fragment{
                     .appendPath("reviews")
                     .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                             getString(R.string.theMovieDBAPI_key));
-            Log.d(LOG_TAG, "fetch movie reviews with: " + reviews );
+//            Log.d(LOG_TAG, "fetch movie reviews with: " + reviews );
 
 
             return new rawMovieReviewResponse(getData(trailer.build().toString()),
@@ -143,6 +147,11 @@ public class DetailFragment extends Fragment{
                 //Extract the movie trailer data from movieTrailerJSON and put them in movieSelected
                 if(movieTrailerJSON.getJSONArray("results").length() == 0){
                     //no trailer available
+                    movieTrailer[] movieTrailers_temp = new movieTrailer[1];
+                    movieTrailers_temp[0]= new movieTrailer("no trailer", "no trailer", "no trailer", "no trailer");
+                    movieSelected.setMovieTrailers(movieTrailers_temp);
+
+
                 }else{
                     movieTrailer[] movieTrailers_temp = new movieTrailer[movieTrailerJSON.getJSONArray("results").length()];
                     for(int i = 0; i < movieTrailers_temp.length ; i++){
@@ -151,14 +160,11 @@ public class DetailFragment extends Fragment{
                                 movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("site"),
                                 movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("type"));
 
-                        Log.d(LOG_TAG, movieTrailers_temp[i].toString() );
+                        //Log.d(LOG_TAG, movieTrailers_temp[i].toString() );
                     }
                     movieSelected.setMovieTrailers( movieTrailers_temp );
 
                 }
-
-
-
 
 
                 //Extract the movie trailer data from movieTrailerJSON and put them in movieSelected
@@ -166,21 +172,17 @@ public class DetailFragment extends Fragment{
                     movieReview[] movieReviews_temp= new movieReview[1] ;
                     movieReviews_temp[0] = new movieReview("", "No reviews");
                     movieSelected.setMovieReviews(movieReviews_temp);
-                    Log.d(LOG_TAG, movieReviews_temp[0].toString());
+//                    Log.d(LOG_TAG, movieReviews_temp[0].toString());
                 }
                 else{
                     movieReview[] movieReviews_temp = new movieReview[ movieReviewJSON.getJSONArray("results").length()];
 
 
                     for(int i = 0 ; i < movieReviews_temp.length ; i++){
-                        //TODO: extracting the review content data from the JSON is not working out too well, I have to fix that.
-//                        movieReviews_temp[i]= new movieReview( movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("author"),
-//                            movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("content"));
-
                         movieReviews_temp[i]= new movieReview( movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("author"),
-                                "This is where the content should be");
+                            movieReviewJSON.getJSONArray("results").getJSONObject(i).getString("content"));
 
-                        Log.d(LOG_TAG, movieReviews_temp[i].toString());
+//                        Log.d(LOG_TAG, movieReviews_temp[i].toString());
                     }
                     movieSelected.setMovieReviews(movieReviews_temp);
                 }
