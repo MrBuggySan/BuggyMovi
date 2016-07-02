@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -46,7 +47,7 @@ public class DetailFragment extends Fragment{
 
         movieSelected = bundle.getParcelable(getString(R.string.movieSelectedkey));
 
-        //TODO: add an image browser/carousel to browse through different images related to the movie
+        //TODO: add an image carousel to browse through different images related to the movie
         ImageView poster = (ImageView) rootView.findViewById(R.id.posterImageView);
 
         //TODO: figure out a way to work with dp instead of raw px when drawing the images
@@ -74,19 +75,21 @@ public class DetailFragment extends Fragment{
 
         //if the selected movie does not already have the movie review and movie trailer, the download it
         if(!movieSelected.hasLoadedTrailerandReview()){
-            new FetchTrailerandReviews().execute();
+            new FetchTrailerandReviews(inflater, rootView).execute();
         }
-
-
-
-
-
 
         return rootView;
     }
 
     public class FetchTrailerandReviews extends AsyncTask<Integer, String, rawMovieReviewResponse> {
         private final String LOG_TAG= FetchTrailerandReviews.class.getSimpleName();
+        private View rootView;
+        private LayoutInflater inflater;
+
+        public FetchTrailerandReviews(LayoutInflater inflater_, View rootView_){
+            rootView = rootView_;
+            inflater = inflater_;
+        }
 
         @Override
         public void onPreExecute(){
@@ -191,6 +194,28 @@ public class DetailFragment extends Fragment{
             }catch(JSONException e){
                 Log.e(LOG_TAG, "Failed to create JSON objects out of movie trailer and review API response");
             }
+
+            //TODO: Display the trailer link to youtube
+
+            //TODO: Design a better UI for the reviews
+            LinearLayout detailFragment = (LinearLayout) rootView.findViewById(R.id.detailFragmentLayout);
+            for(int i = 0 ; i < movieSelected.getMovieReviews().length ; i++){
+                View review_entry = (View) inflater.inflate(R.layout.reviewview, null);
+
+                //Set the review content
+                TextView reviewContent = (TextView) review_entry.findViewById(R.id.reviewContent);
+                reviewContent.setText(movieSelected.getMovieReviews()[i].getContent());
+
+                //Set the review author
+                TextView reviewAuthor = (TextView) review_entry.findViewById(R.id.reviewAuthor);
+                reviewAuthor.setText(movieSelected.getMovieReviews()[i].getAuthor());
+
+                //add the view to rootView
+                detailFragment.addView(review_entry);
+
+            }
+
+
 
         }
 
