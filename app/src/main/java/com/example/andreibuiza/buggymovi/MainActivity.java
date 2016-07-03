@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        //If true this means this Activity is a new instance, we are not using a previous instance
         if (savedInstanceState == null) {
             //There's a bug with the back stack when working with this front page, I will take it out for now
             // getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();
@@ -67,20 +68,6 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos);
-
-        /**
-         * Loading Toast
-         */
-
-//        CharSequence text = "Selected: " + pos;
-//        int duration = Toast.LENGTH_SHORT;
-//
-//        Toast toast = Toast.makeText(this, text, duration);
-//        toast.show();
-
-
 
         int buttonID = 0;
         switch (pos){

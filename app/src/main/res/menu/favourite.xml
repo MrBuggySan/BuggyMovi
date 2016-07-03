@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/FavouriteStar"
+        android:title="@string/favouriteTitle"
+        android:icon="@drawable/fave_dog_2_unselected"
+        android:checked="false"
+        app:showAsAction="always"/>
+
+</menu>

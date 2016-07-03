@@ -18,7 +18,7 @@ public class onMovieTrailerClickListener implements View.OnClickListener {
         mContext = context_;
         videoID=id;
     }
-    
+
     @Override
     public void onClick(View v){
         //Start playing the youtube video

@@ -307,11 +307,6 @@ public class MovieGridFragment extends Fragment  {
 
                     return ;
                 }
-
-
-
-
-
                 //turn the String JSON to JSONObjects
                 JSON_response= new theMovieDB_JSON(API_full_response.getConfiguration_str(),
                         API_full_response.getCategory_str() );

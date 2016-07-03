@@ -9,6 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -79,7 +82,35 @@ public class DetailFragment extends Fragment{
             new FetchTrailerandReviews(getContext(), inflater, rootView).execute();
         }
 
+        //TODO: add a star/heart button that will add the movie to the favourite list
+        setHasOptionsMenu(true);
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        inflater.inflate(R.menu.favourite, menu);
+
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.FavouriteStar){
+            if(item.isChecked()){
+                //display the unchecked icon
+                item.setIcon(R.drawable.fave_dog_2_unselected);
+                item.setChecked(false);
+
+            }else{
+                //display the checked icon
+                item.setIcon(R.drawable.fave_dog_2_selected);
+                item.setChecked(true);
+            }
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public class FetchTrailerandReviews extends AsyncTask<Integer, String, rawMovieReviewResponse> {
@@ -204,7 +235,7 @@ public class DetailFragment extends Fragment{
                 Log.e(LOG_TAG, "Failed to create JSON objects out of movie trailer and review API response");
             }
 
-            //TODO: Display the trailer link to youtube
+            //TODO: Display the YouTube trailers on the fragment better
             LinearLayout TrailerContainer = (LinearLayout) rootView.findViewById(R.id.TrailerContainer);
             for(int i = 0 ; i < movieSelected.getMovieTrailers().length ; i++){
                 if( movieSelected.getMovieTrailers()[i].getName() == "no trailer"){
@@ -236,10 +267,10 @@ public class DetailFragment extends Fragment{
                         .load(DefaultTrailerImage.toString())
                         .resize(480, 360)
                         .into(TrailerImage);
-                Log.d(LOG_TAG, "This is the URL used for the youtube image: " + DefaultTrailerImage.toString() );
+//                Log.d(LOG_TAG, "This is the URL used for the youtube image: " + DefaultTrailerImage.toString() );
 
 
-                //TODO: hookup the ImageView with a listener
+
                 TrailerImage.setOnClickListener(new onMovieTrailerClickListener(movieSelected.getMovieTrailers()[i].getTrailerKey(), mContext));
 
 
