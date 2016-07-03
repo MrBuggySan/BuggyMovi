@@ -231,12 +231,16 @@ public class DetailFragment extends Fragment{
                                 .appendPath(movieSelected.getMovieTrailers()[i].getTrailerKey())
                                 .appendPath("0.jpg");
 
-                //TODO: use a better value for width and height
+                //TODO: use a better value for width and height, possibly in dp
                 Picasso.with(mContext)
                         .load(DefaultTrailerImage.toString())
                         .resize(480, 360)
                         .into(TrailerImage);
                 Log.d(LOG_TAG, "This is the URL used for the youtube image: " + DefaultTrailerImage.toString() );
+
+
+                //TODO: hookup the ImageView with a listener
+                TrailerImage.setOnClickListener(new onMovieTrailerClickListener(movieSelected.getMovieTrailers()[i].getTrailerKey(), mContext));
 
 
             }

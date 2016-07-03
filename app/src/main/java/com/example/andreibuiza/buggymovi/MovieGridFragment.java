@@ -88,7 +88,9 @@ public class MovieGridFragment extends Fragment  {
     }
 
 
-    // Container Activity must implement this interface
+    /**
+     *
+     */
     public interface OnPosterSelectedListener {
         public void OnPosterSelected(Movie_element movieSelected);
     }
@@ -334,7 +336,6 @@ public class MovieGridFragment extends Fragment  {
             //The ImageAdapter expects the imageURL to be ready, I cannot add data to it dynamically like
             //ArrayAdapter from the Weather Application.
             gridview.setAdapter(new ImageAdapter(getActivity()));
-
 
             //set the listener when the user select one of the posters
             gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
