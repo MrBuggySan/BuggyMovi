@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 
 public class MainActivity extends AppCompatActivity implements FrontMenuFragment.OnButtonSelectedListener,
         MovieGridFragment.OnPosterSelectedListener, AdapterView.OnItemSelectedListener{
-    //TODO: Make sure that the user's internet is connected
+
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private theMovieDB_API_response API_full_response;
     private int currentCategoryID;

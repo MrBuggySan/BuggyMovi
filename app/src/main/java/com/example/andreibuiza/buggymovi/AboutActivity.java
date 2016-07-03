@@ -20,7 +20,7 @@ public class AboutActivity extends AppCompatActivity {
 
         //TODO: Setup an explanation for the app
         //TODO: Buggy's picture
-        //TODO: theMovieDB's logo
+        //TODO: fixup theMovieDB's logo
 
 
 

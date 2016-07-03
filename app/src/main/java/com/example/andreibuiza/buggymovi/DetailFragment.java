@@ -1,5 +1,6 @@
 package com.example.andreibuiza.buggymovi;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -75,7 +76,7 @@ public class DetailFragment extends Fragment{
 
         //if the selected movie does not already have the movie review and movie trailer, the download it
         if(!movieSelected.hasLoadedTrailerandReview()){
-            new FetchTrailerandReviews(inflater, rootView).execute();
+            new FetchTrailerandReviews(getContext(), inflater, rootView).execute();
         }
 
         return rootView;
@@ -85,8 +86,10 @@ public class DetailFragment extends Fragment{
         private final String LOG_TAG= FetchTrailerandReviews.class.getSimpleName();
         private View rootView;
         private LayoutInflater inflater;
+        private Context mContext;
 
-        public FetchTrailerandReviews(LayoutInflater inflater_, View rootView_){
+        public FetchTrailerandReviews(Context context_, LayoutInflater inflater_, View rootView_){
+            mContext= context_;
             rootView = rootView_;
             inflater = inflater_;
         }
@@ -115,7 +118,7 @@ public class DetailFragment extends Fragment{
                     .appendPath("videos")
                     .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                             getString(R.string.theMovieDBAPI_key));
-//            Log.d(LOG_TAG, "fetch movie trailer with: " + trailer );
+           Log.d(LOG_TAG, "fetch movie trailer with: " + trailer );
 
             //movie reviews
             //http://api.themoviedb.org/3/movie/269149/reviews?api_key=7a0f090baebf83c2c4b2e49a59a85ebc&page=1
@@ -158,6 +161,14 @@ public class DetailFragment extends Fragment{
                 }else{
                     movieTrailer[] movieTrailers_temp = new movieTrailer[movieTrailerJSON.getJSONArray("results").length()];
                     for(int i = 0; i < movieTrailers_temp.length ; i++){
+                        String sitename_test = movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("site");
+                        //TODO: I'm not sure why this is not comparing correctly.
+//                        if( sitename_test.equals("YouTube") ){
+//
+//                            //the site shown must be from youtube
+//                            //TODO: what happens if all avaiable trailers are not on YouTube?
+//                            continue;
+//                        }
                         movieTrailers_temp[i]= new movieTrailer(movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("key"),
                                 movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("name"),
                                 movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("site"),
@@ -168,8 +179,6 @@ public class DetailFragment extends Fragment{
                     movieSelected.setMovieTrailers( movieTrailers_temp );
 
                 }
-
-
                 //Extract the movie trailer data from movieTrailerJSON and put them in movieSelected
                 if(movieReviewJSON.getJSONArray("results").length() == 0){
                     movieReview[] movieReviews_temp= new movieReview[1] ;
@@ -196,9 +205,45 @@ public class DetailFragment extends Fragment{
             }
 
             //TODO: Display the trailer link to youtube
+            LinearLayout TrailerContainer = (LinearLayout) rootView.findViewById(R.id.TrailerContainer);
+            for(int i = 0 ; i < movieSelected.getMovieTrailers().length ; i++){
+                if( movieSelected.getMovieTrailers()[i].getName() == "no trailer"){
+                    //create a TextView which states there are no trailers available
+                    View noTrailerView = (View) inflater.inflate(R.layout.notrailer, null);
 
-            //TODO: Design a better UI for the reviews
-            LinearLayout detailFragment = (LinearLayout) rootView.findViewById(R.id.detailFragmentLayout);
+                    TrailerContainer.addView(noTrailerView);
+                    break;
+                }
+
+                //Display the ImageViews that contain the Trailer thumbnails
+                View TrailerImageContainer = (View) inflater.inflate(R.layout.trailerthumbnail, null);
+                ImageView TrailerImage = (ImageView) TrailerImageContainer.findViewById(R.id.TrailerImage);
+
+                TrailerContainer.addView(TrailerImageContainer);
+
+                //This is the default video image from YouTube.
+                //http://img.youtube.com/vi/0Dx4SiyERVg/0.jpg
+
+                Uri.Builder DefaultTrailerImage= new Uri.Builder()
+                                .scheme("http")
+                                .authority("img.youtube.com")
+                                .appendPath("vi")
+                                .appendPath(movieSelected.getMovieTrailers()[i].getTrailerKey())
+                                .appendPath("0.jpg");
+
+                //TODO: use a better value for width and height
+                Picasso.with(mContext)
+                        .load(DefaultTrailerImage.toString())
+                        .resize(480, 360)
+                        .into(TrailerImage);
+                Log.d(LOG_TAG, "This is the URL used for the youtube image: " + DefaultTrailerImage.toString() );
+
+
+            }
+
+
+            //TODO: Design a better UI for the reviews, currently it is BLEEEEEEEEHH >:O
+            LinearLayout ReviewContainer = (LinearLayout) rootView.findViewById(R.id.ReviewContainer);
             for(int i = 0 ; i < movieSelected.getMovieReviews().length ; i++){
                 View review_entry = (View) inflater.inflate(R.layout.reviewview, null);
 
@@ -211,15 +256,10 @@ public class DetailFragment extends Fragment{
                 reviewAuthor.setText(movieSelected.getMovieReviews()[i].getAuthor());
 
                 //add the view to rootView
-                detailFragment.addView(review_entry);
+                ReviewContainer.addView(review_entry);
 
             }
-
-
-
         }
-
-
 
         /**
          * Build the base of the query

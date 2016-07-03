@@ -49,5 +49,41 @@
             android:paddingTop="10dp"
             android:paddingBottom="10dp" />
 
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/TrailerContainer"
+            android:layout_weight="0.05">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/TrailerTitle"
+                android:id="@+id/TrailerText"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/ReviewContainer"
+            android:layout_weight="0.05">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/ReviewsTitle"
+                android:id="@+id/ReviewText"
+                android:layout_weight="0.05" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
