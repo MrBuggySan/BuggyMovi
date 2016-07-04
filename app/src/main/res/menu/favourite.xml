@@ -5,7 +5,6 @@
     <item
         android:id="@+id/FavouriteStar"
         android:title="@string/favouriteTitle"
-        android:icon="@drawable/fave_dog_2_unselected"
         android:checked="false"
         app:showAsAction="always"/>
 

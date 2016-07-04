@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         }
     }
 
+    //TODO: give the user the option to reset the favourite list
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

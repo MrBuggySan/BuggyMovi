@@ -1,6 +1,7 @@
 package com.example.andreibuiza.buggymovi;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -36,6 +38,7 @@ import java.net.URL;
 public class DetailFragment extends Fragment{
     private final String LOG_TAG = DetailFragment.class.getSimpleName();
     private Movie_element movieSelected;
+
     @Override
     public void onCreate (Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -71,6 +74,7 @@ public class DetailFragment extends Fragment{
 
         //turn off the spinner from moviegridfragment
         ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
+        //TODO: this will be a problem when I have this and the MovieGridFragment displayed together
         myToolbar.setDisplayShowCustomEnabled(false);
         myToolbar.setDisplayShowTitleEnabled(true);
         myToolbar.setTitle(movieSelected.getTitle());
@@ -82,7 +86,7 @@ public class DetailFragment extends Fragment{
             new FetchTrailerandReviews(getContext(), inflater, rootView).execute();
         }
 
-        //TODO: add a star/heart button that will add the movie to the favourite list
+
         setHasOptionsMenu(true);
         return rootView;
     }
@@ -90,11 +94,24 @@ public class DetailFragment extends Fragment{
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.favourite, menu);
+        MenuItem faveIcon = menu.findItem(R.id.FavouriteStar);
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        String json = mPrefs.getString(movieSelected.getMovieID(), "");
+        //TODO:Check if this equality works
+        if(json.equals("")){
+            faveIcon.setIcon(R.drawable.fave_dog_2_unselected);
+            faveIcon.setChecked(false);
+        }else{
+            faveIcon.setIcon(R.drawable.fave_dog_2_selected);
+            faveIcon.setChecked(true);
+        }
 
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
 
         if(id == R.id.FavouriteStar){
             if(item.isChecked()){
@@ -102,10 +119,18 @@ public class DetailFragment extends Fragment{
                 item.setIcon(R.drawable.fave_dog_2_unselected);
                 item.setChecked(false);
 
+                prefsEditor.remove(movieSelected.getMovieID()).commit();
+
             }else{
                 //display the checked icon
                 item.setIcon(R.drawable.fave_dog_2_selected);
                 item.setChecked(true);
+
+                Gson gson = new Gson();
+                String MovieJSON = gson.toJson(movieSelected);
+                prefsEditor.putString(movieSelected.getMovieID(), MovieJSON);
+                prefsEditor.commit();
+
             }
 
         }
@@ -197,7 +222,7 @@ public class DetailFragment extends Fragment{
 //                        if( sitename_test.equals("YouTube") ){
 //
 //                            //the site shown must be from youtube
-//                            //TODO: what happens if all avaiable trailers are not on YouTube?
+//                            //TODO: what happens if all available trailers are not on YouTube?
 //                            continue;
 //                        }
                         movieTrailers_temp[i]= new movieTrailer(movieTrailerJSON.getJSONArray("results").getJSONObject(i).getString("key"),
