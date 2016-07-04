@@ -11,7 +11,9 @@ public class Data_Extracts {
     private Movie_element[] catMovies;
     private String baseImgURL;
 
+    public Data_Extracts(){
 
+    }
 
     /**
      * Notes: This constructor only makes an array, it does no initialization
@@ -28,9 +30,6 @@ public class Data_Extracts {
     public Movie_element[] getCatMovies() {
         return catMovies;
     }
-
-
-
 
 
     public String getBaseImgURL(int elementWidth) {

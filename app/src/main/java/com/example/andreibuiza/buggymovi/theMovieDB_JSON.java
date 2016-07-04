@@ -33,7 +33,12 @@ public class theMovieDB_JSON {
 
         //Extract the data
         for(int i = 0 ; i < cat.length; i++){
-            cat[i]= new Movie_element(getCatImageURL_of(i),getCatMovieTitle(i), getCatSynopsis(i), getCatRating(i), getCatReleaseDate(i), getMovieID(i) );
+            cat[i]= new Movie_element(getCatImageURL_of(i), getCatMovieTitle(i),
+                    getCatSynopsis(i), getCatRating(i),
+                    getCatReleaseDate(i), getMovieID(i) );
+
+            //Set the full poster URL right away, we are picking w780 to be used
+            cat[i].setFullPosterURL(movieDatabase.getBaseImgURL(700));
         }
 
 

@@ -63,11 +63,6 @@ public class MovieGridFragment extends Fragment  {
     }
 
     @Override
-    public void onCreate (Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     //Draw the UI elements on the screen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,57 +77,23 @@ public class MovieGridFragment extends Fragment  {
             new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
         }
         else{
-
-            //TODO:gather the favourite list from sharedPreferences
-            SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-            Set<String> fave_set = (HashSet<String>) mPrefs.getStringSet(getString(R.string.favouritelistKEY), null);
-            //TODO:What if the list does not exist?
-            if(fave_set == null){
-                //an empty screen
-                return rootView;
-            }
-
-            //TODO:fill in allMovieData
-            Iterator<String> favouriteList = fave_set.iterator();
-
-            while(favouriteList.hasNext()){
-                String movieID = favouriteList.next();
-
-                //get the all the favourite movie information using the movieID
-                String favouriteMovie_str = mPrefs.getString(movieID, "");
-                if(favouriteMovie_str.equals("")){
-                    Log.d(LOG_TAG, "movieID was found in favouriteList but not found in SharedPreferences!");
-                    continue;
-                }
-                Gson gson = new Gson();
-                Movie_element favouriteMovie = gson.fromJson(favouriteMovie_str, Movie_element.class);
-
-                Log.d(LOG_TAG, favouriteMovie.getTitle());
-            }
-            //TODO:create the gridview with imageAdapter
-
-            //TODO: setup the click listeners for the gridView
+            //do not download any data
+            setupFavouriteListGrid(rootView);
         }
-
 
         return rootView;
     }
 
-    @Override
-    public void onStart(){
-        super.onStart();
-    }
-
-
     /**
-     *
+     *Interface to be implemented by the Activity
+     * This interface will call the method that will switch the grid fragment with the detail fragment
      */
     public interface OnPosterSelectedListener {
         public void OnPosterSelected(Movie_element movieSelected);
     }
 
     /**
-     * Change the toolbar title of the GridView fragment
+     * Change the toolbar of the GridView fragment to be the spinner menu
      * @param categoryID
      */
     public void toolBarSetup(int categoryID, LayoutInflater inflater){
@@ -188,6 +149,84 @@ public class MovieGridFragment extends Fragment  {
 
     }
 
+    /**
+     * Setup the FavouriteListGrid
+     * @param rootView
+     */
+    public void setupFavouriteListGrid(View rootView){
+        //TODO:gather the favourite list from sharedPreferences
+        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Set<String> fave_set = (HashSet<String>) mPrefs.getStringSet(getString(R.string.favouritelistKEY), null);
+        //TODO:What if the list does not exist?
+        if(fave_set == null){
+            //an empty screen
+            return;
+        }
+
+        //TODO:fill in allMovieData
+        Iterator<String> favouriteList = fave_set.iterator();
+        int favouriteListSize = fave_set.size();
+        int counter = 0;
+        Movie_element[] favouriteMovies = new Movie_element[favouriteListSize];
+        Log.d(LOG_TAG, "The size of the favourite list is: " + favouriteListSize);
+        while(favouriteList.hasNext()){
+
+            String movieID = favouriteList.next();
+
+            //get the all the favourite movie information using the movieID
+            String favouriteMovie_str = mPrefs.getString(movieID, "");
+            if(favouriteMovie_str.equals("")){
+                Log.d(LOG_TAG, "movieID was found in favouriteList but not found in SharedPreferences!");
+                continue;
+            }
+            Gson gson = new Gson();
+            Movie_element favouriteMovie = gson.fromJson(favouriteMovie_str, Movie_element.class);
+
+
+            //counter can only be 0 to favouriteListSize-1
+            if(counter == favouriteListSize){
+                Log.e(LOG_TAG, "iterator has exceeded favouriteListSize");
+            }
+
+            //add the favouriteMovie onto favouriteMovies
+            favouriteMovies[counter]=favouriteMovie;
+            counter++;
+            Log.d(LOG_TAG, favouriteMovie.getTitle());
+        }
+
+        //set allMovieData, note that we will not use baseImgURL
+        allMovieData= new Data_Extracts();
+        allMovieData.setCatMovies(favouriteMovies);
+
+        //TODO:create the gridview with imageAdapter
+//        GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
+//        gridview.setAdapter(new ImageAdapter(getActivity()));
+
+        //TODO: setup the click listeners for the gridView
+        Log.d(LOG_TAG, "placeholder");
+    }
+
+    public void setupGridView(View rootView){
+        //We are now ready to create the gridView
+        GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
+        //The ImageAdapter expects the imageURL to be ready, I cannot add data to it dynamically like
+        //ArrayAdapter from the Weather Application.
+        gridview.setAdapter(new ImageAdapter(getActivity()));
+
+        //set the listener when the user selects one of the posters
+        gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
+
+                //sets up the Activity's implementation to activate when a poster is clicked
+                //set the URL to have w780, this is the largest poster we can get other than the orginial poster
+                Movie_element selected_movie = allMovieData.getCatMovies()[i];
+                mListener.OnPosterSelected(selected_movie);
+
+            }
+        });
+    }
+
     //TODO: Move this class onto its own file
     public class ImageAdapter extends BaseAdapter {
         private Context mContext;
@@ -235,8 +274,6 @@ public class MovieGridFragment extends Fragment  {
         }
 
     }
-
-
 
     public class Fetch_the_MovieDB_API extends AsyncTask<Integer, String, theMovieDB_API_response> {
         private final String LOG_TAG= Fetch_the_MovieDB_API.class.getSimpleName();
@@ -365,34 +402,11 @@ public class MovieGridFragment extends Fragment  {
                 //Extract the data from JSONObjects and put them in allMovieData
                 JSON_response.setAll_of(allMovieData);
 
-                //allMovieData.testContent();
-
             }catch(JSONException e){
                 Log.e(LOG_TAG, "Failed to create JSON objects out of API response");
             }
-
-
-            //We are now ready to create the gridView
-            GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
-            //The ImageAdapter expects the imageURL to be ready, I cannot add data to it dynamically like
-            //ArrayAdapter from the Weather Application.
-            gridview.setAdapter(new ImageAdapter(getActivity()));
-
-            //set the listener when the user selects one of the posters
-            gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
-
-                    //sets up the Activity's implementation to activate when a poster is clicked
-                    //set the URL to have w780, this is the largest poster we can get other than the orginial poster
-                    Movie_element selected_movie = allMovieData.getCatMovies()[i];
-
-                    //TODO: we need to call this sooner, from now on we will download the 780 px versions of the poster
-                    selected_movie.setFullPosterURL(allMovieData.getBaseImgURL(700));
-                    mListener.OnPosterSelected(selected_movie);
-
-                }
-            });
+            
+            setupGridView(rootView);
 
 
         }
