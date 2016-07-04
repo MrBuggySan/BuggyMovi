@@ -31,6 +31,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by AndreiBuiza on 6/23/2016.
@@ -52,7 +54,7 @@ public class DetailFragment extends Fragment{
 
         Bundle bundle = this.getArguments();
 
-        movieSelected = bundle.getParcelable(getString(R.string.movieSelectedkey));
+        movieSelected = (Movie_element) bundle.getParcelable(getString(R.string.movieSelectedkey));
 
         //TODO: add an image carousel to browse through different images related to the movie
         ImageView poster = (ImageView) rootView.findViewById(R.id.posterImageView);
@@ -110,17 +112,30 @@ public class DetailFragment extends Fragment{
 
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
 
         if(id == R.id.FavouriteStar){
+            SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+
+            //Retrieve the favourite list
+            Set<String> fave_set = mPrefs.getStringSet(getString(R.string.favouritelistKEY), null);
+            //remove the favourite list
+            prefsEditor.remove(getString(R.string.favouritelistKEY));
+            if(fave_set == null){
+                fave_set = new HashSet<>();
+            }
+
             if(item.isChecked()){
                 //display the unchecked icon
                 item.setIcon(R.drawable.fave_dog_2_unselected);
                 item.setChecked(false);
 
-                prefsEditor.remove(movieSelected.getMovieID()).commit();
+                prefsEditor.remove(movieSelected.getMovieID());
 
+                //update the favourite list
+                if(!fave_set.remove(movieSelected.getMovieID())){
+                    Log.e(LOG_TAG, "The movie was not there in the first place...");
+                }
             }else{
                 //display the checked icon
                 item.setIcon(R.drawable.fave_dog_2_selected);
@@ -129,9 +144,14 @@ public class DetailFragment extends Fragment{
                 Gson gson = new Gson();
                 String MovieJSON = gson.toJson(movieSelected);
                 prefsEditor.putString(movieSelected.getMovieID(), MovieJSON);
-                prefsEditor.commit();
 
+                //update the favourite list
+                fave_set.add(movieSelected.getMovieID());
             }
+
+            //add the favourite list
+            prefsEditor.putStringSet(getString(R.string.favouritelistKEY), fave_set);
+            prefsEditor.commit();
 
         }
 

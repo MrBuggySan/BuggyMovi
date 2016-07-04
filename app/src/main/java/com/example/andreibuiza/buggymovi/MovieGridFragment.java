@@ -2,6 +2,7 @@ package com.example.andreibuiza.buggymovi;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -32,6 +34,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by AndreiBuiza on 6/11/2016.
@@ -70,13 +75,44 @@ public class MovieGridFragment extends Fragment  {
 
         Bundle bundle = this.getArguments();
         int category = bundle.getInt(getString(R.string.menuToGridKey));
-
-        //start downloading the data
-        new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
-
-        //setHasOptionsMenu(true);
-
         toolBarSetup(category, inflater);
+
+        if(category != R.id.favouriteButton){
+            //start downloading the data
+            new Fetch_the_MovieDB_API(getContext(), rootView).execute(category);
+        }
+        else{
+
+            //TODO:gather the favourite list from sharedPreferences
+            SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+            Set<String> fave_set = (HashSet<String>) mPrefs.getStringSet(getString(R.string.favouritelistKEY), null);
+            //TODO:What if the list does not exist?
+            if(fave_set == null){
+                //an empty screen
+                return rootView;
+            }
+
+            //TODO:fill in allMovieData
+            Iterator<String> favouriteList = fave_set.iterator();
+
+            while(favouriteList.hasNext()){
+                String movieID = favouriteList.next();
+
+                //get the all the favourite movie information using the movieID
+                String favouriteMovie_str = mPrefs.getString(movieID, "");
+                if(favouriteMovie_str.equals("")){
+                    Log.d(LOG_TAG, "movieID was found in favouriteList but not found in SharedPreferences!");
+                    continue;
+                }
+                Gson gson = new Gson();
+                Movie_element favouriteMovie = gson.fromJson(favouriteMovie_str, Movie_element.class);
+
+                Log.d(LOG_TAG, favouriteMovie.getTitle());
+            }
+            //TODO:create the gridview with imageAdapter
+
+            //TODO: setup the click listeners for the gridView
+        }
 
 
         return rootView;
@@ -104,11 +140,13 @@ public class MovieGridFragment extends Fragment  {
         View vi = inflater.inflate(R.layout.moviegridspinner, null);
         Spinner categorySpinner = (Spinner) vi.findViewById(R.id.movieGridSpinner);
 
+        //Set the list of Strings to be displayed on the spinner
         ArrayList<String> spinnerContentValues= new ArrayList<>();
         spinnerContentValues.add(getString(R.string.popular));
         spinnerContentValues.add(getString(R.string.top));
         spinnerContentValues.add(getString(R.string.nowPlaying));
         spinnerContentValues.add(getString(R.string.upcoming));
+        spinnerContentValues.add(getString(R.string.favourites));
 
         //Set the event callback
         categorySpinner.setOnItemSelectedListener((MainActivity) getActivity());
@@ -139,6 +177,9 @@ public class MovieGridFragment extends Fragment  {
                 break;
             case R.id.upcomingButton :
                 categorySpinner.setSelection(3);
+                break;
+            case R.id.favouriteButton:
+                categorySpinner.setSelection(4);
                 break;
 //            case R.id.latestButton :
 //                myToolbar.setTitle(getString(R.string.latest));
@@ -181,15 +222,20 @@ public class MovieGridFragment extends Fragment  {
             //The poster must fill the width of the grid element
             GridView grid = (GridView) parent.findViewById(R.id.gridView);
             //TODO: setup placeholder and error for Picasso
+            //TODO: refactor the load parameter to be fullPosterURL so it can also be usable for Favourite list category
+            //TODO: setup resize to use getColumnWidth from a variable
             Picasso.with(mContext)
                     .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getCatMovies()[position].getPosterURL())
                     .resize(grid.getColumnWidth(),(int) (grid.getColumnWidth()*1.5) )
                     .into(imageView);
 
+            //Log.d(LOG_TAG, "This is the url used for the little posters: " + allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getCatMovies()[position].getPosterURL());
+
             return imageView;
         }
 
     }
+
 
 
     public class Fetch_the_MovieDB_API extends AsyncTask<Integer, String, theMovieDB_API_response> {
@@ -332,7 +378,7 @@ public class MovieGridFragment extends Fragment  {
             //ArrayAdapter from the Weather Application.
             gridview.setAdapter(new ImageAdapter(getActivity()));
 
-            //set the listener when the user select one of the posters
+            //set the listener when the user selects one of the posters
             gridview.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l){
@@ -340,6 +386,8 @@ public class MovieGridFragment extends Fragment  {
                     //sets up the Activity's implementation to activate when a poster is clicked
                     //set the URL to have w780, this is the largest poster we can get other than the orginial poster
                     Movie_element selected_movie = allMovieData.getCatMovies()[i];
+
+                    //TODO: we need to call this sooner, from now on we will download the 780 px versions of the poster
                     selected_movie.setFullPosterURL(allMovieData.getBaseImgURL(700));
                     mListener.OnPosterSelected(selected_movie);
 

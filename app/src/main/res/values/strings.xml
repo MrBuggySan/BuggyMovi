@@ -12,10 +12,12 @@
     <string name="top">Top Rated Movies</string>
     <string name="nowPlaying">Now Playing</string>
     <string name="upcoming">Upcoming Movies</string>
+    <string name="favourites">Favourites</string>
     <string name="latest">Latest Movie</string>
 
 
     <string name="AboutMenu">About</string>
+    <string name="ClearFavouritesMenu">Clear Favourites</string>
     <string name="aboutBlurb1">Welcome to Buggy Movi! Quickly browse through the different categories
     to discover the next movie you will watch. You can make your own favourites list which you can use for reference later on.</string>
     <string name="TMDbnotice">This product uses the TMDb API but is not endorsed or certified by TMDb.</string>
@@ -26,4 +28,6 @@
     <string name="noTrailer">Sorry, there are no trailers available.</string>
 
     <string name="favouriteTitle">Favourite</string>
+
+    <string name="favouritelistKEY">com.BuggyMovi.Lemu.favouritelist</string>
 </resources>

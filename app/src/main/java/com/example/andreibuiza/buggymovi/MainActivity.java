@@ -1,6 +1,8 @@
 package com.example.andreibuiza.buggymovi;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -63,9 +65,20 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
             startActivity(intent);
             return true;
         }
+
+        if (id == R.id.ClearFavourites){
+            //clear the favourites list
+            SharedPreferences mPrefs = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+            prefsEditor.clear();
+            prefsEditor.commit();
+        }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This method is activated when one of the items in the spinner is selected
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
@@ -79,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
             case 2: buttonID = R.id.nowPlayingButton;
                 break;
             case 3: buttonID = R.id.upcomingButton;
+                break;
+            case 4: buttonID = R.id.favouriteButton;
                 break;
         }
 
