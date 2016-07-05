@@ -79,13 +79,13 @@ public class DetailFragment extends Fragment{
         //turn off the spinner from moviegridfragment
         ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
         //TODO: this will be a problem when I have this and the MovieGridFragment displayed together
-        myToolbar.setDisplayShowCustomEnabled(false);
+        //myToolbar.setDisplayShowCustomEnabled(false);
         myToolbar.setDisplayShowTitleEnabled(true);
         myToolbar.setTitle(movieSelected.getTitle());
 
 
 
-        //if the selected movie does not already have the movie review and movie trailer, the download it
+        //if the selected movie does not already have the movie review and movie trailer, then download it
         if(!movieSelected.hasLoadedTrailerandReview()){
             new FetchTrailerandReviews(getContext(), inflater, rootView).execute();
         }
@@ -99,9 +99,10 @@ public class DetailFragment extends Fragment{
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.favourite, menu);
         MenuItem faveIcon = menu.findItem(R.id.FavouriteStar);
-        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences mPrefs = getActivity().getSharedPreferences(getString(R.string.favouritelistKEY),
+                Context.MODE_PRIVATE);
         String json = mPrefs.getString(movieSelected.getMovieID(), "");
-        //TODO:Check if this equality works
+
         if(json.equals("")){
             faveIcon.setIcon(R.drawable.fave_dog_2_unselected);
             faveIcon.setChecked(false);
@@ -116,7 +117,8 @@ public class DetailFragment extends Fragment{
         int id = item.getItemId();
 
         if(id == R.id.FavouriteStar){
-            SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences mPrefs = getActivity().getSharedPreferences(getString(R.string.favouritelistKEY),
+                    Context.MODE_PRIVATE);
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
 
             //Retrieve the favourite list

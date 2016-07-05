@@ -79,6 +79,7 @@ public class MovieGridFragment extends Fragment  {
         else{
             //do not download any data
             setupFavouriteListGrid(rootView);
+            Log.d(LOG_TAG, "Creating the Favourites List");
         }
 
         return rootView;
@@ -155,7 +156,8 @@ public class MovieGridFragment extends Fragment  {
      */
     public void setupFavouriteListGrid(View rootView){
         //gather the favourite list from sharedPreferences
-        SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences mPrefs = getActivity().getSharedPreferences(getString(R.string.favouritelistKEY),
+                Context.MODE_PRIVATE);
         Set<String> fave_set = (HashSet<String>) mPrefs.getStringSet(getString(R.string.favouritelistKEY), null);
 
         if(fave_set == null){
@@ -168,7 +170,7 @@ public class MovieGridFragment extends Fragment  {
         int favouriteListSize = fave_set.size();
         int counter = 0;
         Movie_element[] favouriteMovies = new Movie_element[favouriteListSize];
-        Log.d(LOG_TAG, "The size of the favourite list is: " + favouriteListSize);
+        //Log.d(LOG_TAG, "The size of the favourite list is: " + favouriteListSize);
         while(favouriteList.hasNext()){
 
             String movieID = favouriteList.next();

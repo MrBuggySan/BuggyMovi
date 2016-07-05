@@ -23,6 +23,11 @@
                     android:label="@string/AboutMenu"
                     android:parentActivityName=".MainActivity"/>
 
+        <activity android:name=".DetailActivity"
+                    android:label="@string/detailabel"
+                    android:parentActivityName=".MainActivity"/>
+
+
 
     </application>
 

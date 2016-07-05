@@ -144,12 +144,12 @@ public class Movie_element implements Parcelable{
     }
 
     public void writeToParcel(Parcel out, int flags) {
-        out.writeStringArray(new String[]{posterURL, fullPosterURL, title, synopsis, releaseDate});
+        out.writeStringArray(new String[]{posterURL, fullPosterURL, title, synopsis, releaseDate, movieID});
         out.writeDouble(rating);
     }
 
     private Movie_element(Parcel in) {
-        String[] data = new String[5];
+        String[] data = new String[6];
 
         in.readStringArray(data);
         posterURL = data[0];
@@ -157,6 +157,7 @@ public class Movie_element implements Parcelable{
         title = data[2];
         synopsis = data[3];
         releaseDate = data[4];
+        movieID = data[5];
 
         rating = in.readDouble();
     }

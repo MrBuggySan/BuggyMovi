@@ -18,9 +18,9 @@ public class AboutActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //TODO: Setup an explanation for the app
+
         //TODO: Buggy's picture
-        //TODO: fixup theMovieDB's logo
+        //TODO: fixup theMovieDB's logo, there's too much padding
 
 
 

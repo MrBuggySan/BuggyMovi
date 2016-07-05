@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +47,25 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         }
     }
 
-    //TODO: give the user the option to reset the favourite list
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        Log.d(LOG_TAG, "onRestart");
+        MovieGridFragment gridViewFragment = new MovieGridFragment();
+        int buttonID= currentCategoryID;
+
+        //set the argument of the MovieGridFragment
+        Bundle args = new Bundle();
+        args.putInt(getString(R.string.menuToGridKey), buttonID);
+        gridViewFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, gridViewFragment);
+
+        transaction.commit();
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -68,10 +87,24 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
 
         if (id == R.id.ClearFavourites){
             //clear the favourites list
-            SharedPreferences mPrefs = getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences mPrefs = getSharedPreferences(getString(R.string.favouritelistKEY),
+                    Context.MODE_PRIVATE);
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
             prefsEditor.clear();
             prefsEditor.commit();
+            //TODO: if we are on favourites, refresh the page by calling a new favourites gridView
+            if(currentCategoryID == R.id.favouriteButton){
+                MovieGridFragment gridViewFragment = new MovieGridFragment();
+
+                Bundle args = new Bundle();
+                args.putInt(getString(R.string.menuToGridKey), currentCategoryID);
+                gridViewFragment.setArguments(args);
+
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, gridViewFragment);
+
+                transaction.commit();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -146,18 +179,25 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
 
     }
 
+    //IF I implement this though the data exchanges will have to be modified
     @Override
     public void OnPosterSelected(Movie_element movieSelected){
         DetailFragment detailFragment = new DetailFragment();
         Bundle args = new Bundle();
 
         args.putParcelable(getString(R.string.movieSelectedkey), movieSelected);
-        detailFragment.setArguments(args);
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, detailFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+//        detailFragment.setArguments(args);
+//
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container, detailFragment);
+//        transaction.addToBackStack(null);
+//        transaction.commit();
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.class.getSimpleName(), args);
+        startActivity(intent);
 
     }
 

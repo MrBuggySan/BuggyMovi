@@ -30,4 +30,6 @@
     <string name="favouriteTitle">Favourite</string>
 
     <string name="favouritelistKEY">com.BuggyMovi.Lemu.favouritelist</string>
+
+    <string name="detailabel">Movie Details</string>
 </resources>
