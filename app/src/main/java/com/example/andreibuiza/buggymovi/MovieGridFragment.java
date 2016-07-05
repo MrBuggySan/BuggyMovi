@@ -154,16 +154,16 @@ public class MovieGridFragment extends Fragment  {
      * @param rootView
      */
     public void setupFavouriteListGrid(View rootView){
-        //TODO:gather the favourite list from sharedPreferences
+        //gather the favourite list from sharedPreferences
         SharedPreferences mPrefs = getActivity().getPreferences(Context.MODE_PRIVATE);
         Set<String> fave_set = (HashSet<String>) mPrefs.getStringSet(getString(R.string.favouritelistKEY), null);
-        //TODO:What if the list does not exist?
+
         if(fave_set == null){
             //an empty screen
             return;
         }
 
-        //TODO:fill in allMovieData
+        //fill in allMovieData
         Iterator<String> favouriteList = fave_set.iterator();
         int favouriteListSize = fave_set.size();
         int counter = 0;
@@ -198,12 +198,8 @@ public class MovieGridFragment extends Fragment  {
         allMovieData= new Data_Extracts();
         allMovieData.setCatMovies(favouriteMovies);
 
-        //TODO:create the gridview with imageAdapter
-//        GridView gridview = (GridView) rootView.findViewById(R.id.gridView);
-//        gridview.setAdapter(new ImageAdapter(getActivity()));
+        setupGridView(rootView);
 
-        //TODO: setup the click listeners for the gridView
-        Log.d(LOG_TAG, "placeholder");
     }
 
     public void setupGridView(View rootView){
@@ -235,9 +231,8 @@ public class MovieGridFragment extends Fragment  {
             mContext = c;
         }
 
-        //I have to fill this in correctly
         public int getCount() {
-            return 20;
+            return allMovieData.getCatMovies().length;
         }
 
         public Object getItem(int position) {
@@ -260,11 +255,10 @@ public class MovieGridFragment extends Fragment  {
             //Use Picasso to set the image onto the GridView
             //The poster must fill the width of the grid element
             GridView grid = (GridView) parent.findViewById(R.id.gridView);
-            //TODO: setup placeholder and error for Picasso
-            //TODO: refactor the load parameter to be fullPosterURL so it can also be usable for Favourite list category
-            //TODO: setup resize to use getColumnWidth from a variable
             Picasso.with(mContext)
-                    .load(allMovieData.getBaseImgURL(grid.getColumnWidth()) + allMovieData.getCatMovies()[position].getPosterURL())
+                    .load(allMovieData.getCatMovies()[position].getFullPosterURL())
+                    .placeholder(R.drawable.dog_placeholder)
+                    .error(R.drawable.dog_error)
                     .resize(grid.getColumnWidth(),(int) (grid.getColumnWidth()*1.5) )
                     .into(imageView);
 
@@ -405,7 +399,7 @@ public class MovieGridFragment extends Fragment  {
             }catch(JSONException e){
                 Log.e(LOG_TAG, "Failed to create JSON objects out of API response");
             }
-            
+
             setupGridView(rootView);
 
 

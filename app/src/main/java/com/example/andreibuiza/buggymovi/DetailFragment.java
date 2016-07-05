@@ -62,6 +62,8 @@ public class DetailFragment extends Fragment{
         //TODO: figure out a way to work with dp instead of raw px when drawing the images
         Picasso.with(getContext())
                 .load(movieSelected.getFullPosterURL())
+                .placeholder(R.drawable.dog_placeholder)
+                .error(R.drawable.dog_error)
                 .resize(780, (int)(780 * 1.5))
                 .into(poster);
 
@@ -194,7 +196,7 @@ public class DetailFragment extends Fragment{
                     .appendPath("videos")
                     .appendQueryParameter(getString(R.string.theMovieDBAPI_key_parameter),
                             getString(R.string.theMovieDBAPI_key));
-           Log.d(LOG_TAG, "fetch movie trailer with: " + trailer );
+           //Log.d(LOG_TAG, "fetch movie trailer with: " + trailer );
 
             //movie reviews
             //http://api.themoviedb.org/3/movie/269149/reviews?api_key=7a0f090baebf83c2c4b2e49a59a85ebc&page=1
