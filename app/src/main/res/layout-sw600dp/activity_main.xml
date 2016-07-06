@@ -17,6 +17,34 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/TabletLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <FrameLayout
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/TabletLayoutGridView">
+
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/TabletLayoutDetailView">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+
+
 </LinearLayout>
 
 

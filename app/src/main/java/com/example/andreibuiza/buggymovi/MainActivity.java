@@ -14,11 +14,26 @@ import android.view.View;
 import android.widget.AdapterView;
 
 public class MainActivity extends AppCompatActivity implements FrontMenuFragment.OnButtonSelectedListener,
-        MovieGridFragment.OnPosterSelectedListener, AdapterView.OnItemSelectedListener{
+        MovieGridFragment.OnPosterSelectedListener, AdapterView.OnItemSelectedListener {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private theMovieDB_API_response API_full_response;
     private int currentCategoryID;
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        //Save the current category
+        savedInstanceState.putInt(MainActivity.class.getSimpleName(), currentCategoryID);
+        Log.d(LOG_TAG, "onSaveInstanceState is called");
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d(LOG_TAG, "onRestoreInstanceState is called");
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +43,15 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
+        //Determine what version of layout we have
+        
+
+
         //If true this means this Activity is a new instance, we are not using a previous instance
         if (savedInstanceState == null) {
             //There's a bug with the back stack when working with this front page, I will take it out for now
             // getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();
-
+            //TODO: get the last selected category from sharedPreferences
             MovieGridFragment gridViewFragment = new MovieGridFragment();
             currentCategoryID = R.id.popButton;
             int buttonID= currentCategoryID;
@@ -42,8 +61,11 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
             gridViewFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction().add(R.id.container,gridViewFragment).commit();
+//            getSupportFragmentManager().beginTransaction().
 
-            //Log.d(LOG_TAG, "Activity onCreate");
+            Log.d(LOG_TAG, "Activity onCreate, the default category is popular movies");
+        }else{
+            Log.d(LOG_TAG, "savedInstanceState is not null");
         }
     }
 
@@ -63,6 +85,13 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         transaction.replace(R.id.container, gridViewFragment);
 
         transaction.commit();
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
+        //TODO: Save the category selected inside sharedPrefences
     }
 
 

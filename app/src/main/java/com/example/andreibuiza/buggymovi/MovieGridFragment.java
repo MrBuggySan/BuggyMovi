@@ -67,7 +67,7 @@ public class MovieGridFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.moviegrid, container, false);
-
+     //   View rootView = container.findViewById(R.id.GridViewFragment);
         Bundle bundle = this.getArguments();
         int category = bundle.getInt(getString(R.string.menuToGridKey));
         toolBarSetup(category, inflater);
