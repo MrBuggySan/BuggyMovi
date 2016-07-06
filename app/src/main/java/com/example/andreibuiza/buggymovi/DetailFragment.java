@@ -80,8 +80,8 @@ public class DetailFragment extends Fragment{
         ActionBar myToolbar = (ActionBar)((AppCompatActivity) getActivity()).getSupportActionBar();
         //TODO: this will be a problem when I have this and the MovieGridFragment displayed together
         //myToolbar.setDisplayShowCustomEnabled(false);
-        myToolbar.setDisplayShowTitleEnabled(true);
-        myToolbar.setTitle(movieSelected.getTitle());
+//        myToolbar.setDisplayShowTitleEnabled(true);
+//        myToolbar.setTitle(movieSelected.getTitle());
 
 
 

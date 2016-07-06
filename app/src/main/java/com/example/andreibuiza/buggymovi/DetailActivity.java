@@ -26,14 +26,14 @@ public class DetailActivity  extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle args = intent.getBundleExtra(DetailActivity.class.getSimpleName());
-
-
+        Movie_element movieSelected = (Movie_element) args.getParcelable(getString(R.string.movieSelectedkey));
+        myActionBar.setTitle(movieSelected.getTitle());
         //Use a bundle to set the arguments of the detail fragment
         if(savedInstanceState == null){
             DetailFragment detailFragment = new DetailFragment();
             detailFragment.setArguments(args);
 
-            getSupportFragmentManager().beginTransaction().add(R.id.detail_container,detailFragment).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.TabletLayoutDetailView,detailFragment).commit();
         }
     }
 

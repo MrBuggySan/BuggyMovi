@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 
 public class MainActivity extends AppCompatActivity implements FrontMenuFragment.OnButtonSelectedListener,
         MovieGridFragment.OnPosterSelectedListener, AdapterView.OnItemSelectedListener {
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private theMovieDB_API_response API_full_response;
     private int currentCategoryID;
+    private boolean tabletLayout;
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
@@ -42,31 +44,51 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
-
+        LinearLayout contaierlayout = (LinearLayout) findViewById(R.id.container);
+        LinearLayout tabletlayout = (LinearLayout) contaierlayout.findViewById(R.id.TabletLayout);
+        Log.d(LOG_TAG, (String) contaierlayout.getTag() );
         //Determine what version of layout we have
-        
+       if( tabletlayout == null ) {
+           //phone layout is used
+           //If true this means this Activity is a new instance, we are not using a previous instance
+           tabletLayout=false;
+           if (savedInstanceState == null) {
+
+               //TODO: get the last selected category from sharedPreferences
+               MovieGridFragment gridViewFragment = new MovieGridFragment();
+               currentCategoryID = R.id.popButton;
+               int buttonID= currentCategoryID;
+               //set the argument of the MovieGridFragment
+               Bundle args = new Bundle();
+               args.putInt(getString(R.string.menuToGridKey), buttonID);
+               gridViewFragment.setArguments(args);
+
+               getSupportFragmentManager().beginTransaction().add(R.id.TabletLayoutGridView,gridViewFragment).commit();
+//
+               Log.d(LOG_TAG, "Activity onCreate, the default category is popular movies");
+           }else{
+               Log.d(LOG_TAG, "savedInstanceState is not null");
+           }
+
+       }else{
+           //tablet layout is used
+           tabletLayout=true;
+           if(savedInstanceState == null ){
+               MovieGridFragment gridViewFragment = new MovieGridFragment();
+               currentCategoryID = R.id.popButton;
+               Bundle args = new Bundle();
+               args.putInt(getString(R.string.menuToGridKey), currentCategoryID);
+               gridViewFragment.setArguments(args);
+
+               //add the gridView to the left side of the layout
+               getSupportFragmentManager().beginTransaction().add(R.id.TabletLayoutGridView,gridViewFragment).commit();
+           }
 
 
-        //If true this means this Activity is a new instance, we are not using a previous instance
-        if (savedInstanceState == null) {
-            //There's a bug with the back stack when working with this front page, I will take it out for now
-            // getSupportFragmentManager().beginTransaction().add(R.id.container, new FrontMenuFragment()).commit();
-            //TODO: get the last selected category from sharedPreferences
-            MovieGridFragment gridViewFragment = new MovieGridFragment();
-            currentCategoryID = R.id.popButton;
-            int buttonID= currentCategoryID;
-            //set the argument of the MovieGridFragment
-            Bundle args = new Bundle();
-            args.putInt(getString(R.string.menuToGridKey), buttonID);
-            gridViewFragment.setArguments(args);
+       }
 
-            getSupportFragmentManager().beginTransaction().add(R.id.container,gridViewFragment).commit();
-//            getSupportFragmentManager().beginTransaction().
 
-            Log.d(LOG_TAG, "Activity onCreate, the default category is popular movies");
-        }else{
-            Log.d(LOG_TAG, "savedInstanceState is not null");
-        }
+
     }
 
     @Override
@@ -82,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
         gridViewFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, gridViewFragment);
+        transaction.replace(R.id.TabletLayoutGridView, gridViewFragment);
 
         transaction.commit();
     }
@@ -130,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
                 gridViewFragment.setArguments(args);
 
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.container, gridViewFragment);
+                transaction.replace(R.id.TabletLayoutGridView, gridViewFragment);
 
                 transaction.commit();
             }
@@ -172,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
             gridViewFragment.setArguments(args);
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, gridViewFragment);
+            transaction.replace(R.id.TabletLayoutGridView, gridViewFragment);
             //transaction.addToBackStack(null);
             transaction.commit();
 
@@ -187,6 +209,32 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
+
+
+    @Override
+    public void OnPosterSelected(Movie_element movieSelected){
+
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.movieSelectedkey), movieSelected);
+
+
+        if(tabletLayout){
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.TabletLayoutDetailView, detailFragment);
+            transaction.commit();
+        }else{
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra(DetailActivity.class.getSimpleName(), args);
+            startActivity(intent);
+        }
+
+
+
+
+    }
+
 
     @Override
     //TODO: The detail fragment will be activated when 'latest movie' is selected by the user
@@ -207,29 +255,6 @@ public class MainActivity extends AppCompatActivity implements FrontMenuFragment
 
 
     }
-
-    //IF I implement this though the data exchanges will have to be modified
-    @Override
-    public void OnPosterSelected(Movie_element movieSelected){
-        DetailFragment detailFragment = new DetailFragment();
-        Bundle args = new Bundle();
-
-        args.putParcelable(getString(R.string.movieSelectedkey), movieSelected);
-
-
-//        detailFragment.setArguments(args);
-//
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.container, detailFragment);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
-
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DetailActivity.class.getSimpleName(), args);
-        startActivity(intent);
-
-    }
-
 
 
 

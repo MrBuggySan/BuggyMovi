@@ -18,6 +18,13 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/TabletLayoutDetailView">
+
+    </FrameLayout>
+
 </LinearLayout>
 
 
